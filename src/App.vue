@@ -11,6 +11,10 @@ type record = {
   SpotPriceEUR: number
 }
 
+// https://n1.dk/priser-og-vilkaar
+const lavlast = 20.38
+const spidslast = 62.66
+
 const records = ref<record[] | null | undefined>(undefined)
 
 const getData = async () => {
@@ -42,10 +46,21 @@ const getData = async () => {
         datasets: [{
           label: 'Øre',
           data: records.value.map(item => {
-            return (Math.round(item.SpotPriceDKK / 1_000 * 100) || Math.round(item.SpotPriceEUR * 7.45 / 1_000 * 100)) + (item.HourDK.hour() >= 17 && item.HourDK.hour() < 21 ? 20 : 0)
+            // SpotPriceDKK er i DKK/MWh og SpotPriceDKK er null i weekenden og omregnes derfor fra SpotPriceEUR
+            // Der omregnet her til øre/KWh
+            const price = item.SpotPriceDKK / 1_000 * 100 || item.SpotPriceEUR * 7.44 / 1_000 * 100
+            // Spidslast: Alle dage i perioden oktober-marts kl. 17-20.
+            // Lavlast: Alle dage i perioden april-september og alle dage i perioden oktober-marts kl. 00-17 og kl. 20-24.
+            if ((item.HourDK.month() >= 9 || item.HourDK.month() <= 2) && (item.HourDK.hour() >= 17 && item.HourDK.hour() < 20))
+              return price + spidslast
+            else
+              return price + lavlast
           }),
           backgroundColor: records.value.map(item => {
-            return (item.HourDK.hour() >= 17 && item.HourDK.hour() < 21 ? "#eb4d4b" : "#6ab04c")
+            console.log((item.HourDK.month() >= 9 || item.HourDK.month() <= 2));
+            console.log((item.HourDK.hour() >= 17 && item.HourDK.hour() <= 20));
+
+            return ((item.HourDK.month() >= 9 || item.HourDK.month() <= 2) && (item.HourDK.hour() >= 17 && item.HourDK.hour() < 20) ? "#eb4d4b" : "#6ab04c")
           })
         }]
       }
@@ -61,7 +76,7 @@ onMounted(async () => {
 </script>
 
 <template>
-<div v-if="records == undefined">Henter data...</div>
+  <div v-if="records == undefined">Henter data...</div>
   <canvas id="myChart"></canvas>
   <!-- <table border="1">
     <template v-for="item in records">
@@ -70,5 +85,5 @@ onMounted(async () => {
         <td>{{ item.SpotPriceEUR }}</td>
       </tr>
     </template>
-  </table> -->
+  </table>-->
 </template>
