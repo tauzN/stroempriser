@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Chart from 'chart.js/auto';
+import 'chartjs-adapter-dayjs-3';
 import { ref, onMounted, computed } from 'vue'
 import dayjs from 'dayjs';
 import 'dayjs/locale/da'
@@ -28,31 +29,29 @@ const priserMedAfgift = computed<number[]>(() => records.value.map(item => prisM
 const afgifter = computed<number[]>(() => records.value.map(item => prisMedAfgift(item) - prisUdenAfgift(item)))
 const getData = async (): Promise<record[]> => new Promise((resolve, reject) => {
   const data = { "query": `query Dataset {elspotprices(where: {HourDK: {_gte: \"${dayjs().subtract(3, "hours").format("YYYY-MM-DDTHH:mm")}\"}PriceArea: {_eq: \"DK1\"}} order_by: {HourDK: asc} limit: 100){HourDK SpotPriceDKK SpotPriceEUR}}` }
-  fetch(
-    `https://data-api.energidataservice.dk/v1/graphql`,
+  fetch(`https://data-api.energidataservice.dk/v1/graphql`,
     {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json"
       }
-    }
-  )
-  .then(raw => raw.json())
-  .then(json => json.data.elspotprices as record[])
-  .then(data => {
-    resolve(data.map(item => {
-      return {
-        HourDK: dayjs(item.HourDK),
-        SpotPriceDKK: item.SpotPriceDKK,
-        SpotPriceEUR: item.SpotPriceEUR,
-      }
-    }))
-  })
-  .catch((e) => {
-    records.value = null;
-    reject(e)
-  })
+    })
+    .then(raw => raw.json())
+    .then(json => json.data.elspotprices as record[])
+    .then(data => {
+      resolve(data.map(item => {
+        return {
+          HourDK: dayjs(item.HourDK),
+          SpotPriceDKK: item.SpotPriceDKK,
+          SpotPriceEUR: item.SpotPriceEUR,
+        }
+      }))
+    })
+    .catch((e) => {
+      records.value = null;
+      reject(e)
+    })
   // resolve(sampledata.elspotprices.map(item => {
   //   return {
   //     HourDK: dayjs(item.HourDK),
@@ -66,17 +65,31 @@ const drawChart = () => {
   new Chart(chartRef.value, {
     type: "bar",
     options: {
+      locale: "da-dk",
       scales: {
         x: {
-          stacked: true
+          stacked: true,
+          type: "time",
+          time: {
+            unit: "hour",
+            tooltipFormat: "H",
+            displayFormats: {
+              hour: "H"
+            }
+          }
         },
         y: {
-          stacked: true
+          stacked: true,
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
         }
       }
     },
     data: {
-      labels: records.value.map(item => dayjs(item.HourDK).format("HH:mm")),
+      labels: records.value.map(item => item.HourDK.toDate()),
       datasets: [
         {
           type: "line",
@@ -101,25 +114,33 @@ const drawChart = () => {
         {
           type: "bar",
           label: "Afgift",
+          stack: "bar",
           data: afgifter.value,
           backgroundColor: records.value.map(item => {
-            if (item.HourDK.isSame(dayjs(), "hour")) return colors.cyan[900]
-            else if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.3) return colors.green[700]
+            // if (item.HourDK.isSame(dayjs(), "hour")) return colors.cyan[900]
+            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.3) return colors.green[700]
             else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.9) return colors.orange[900]
             else return colors.neutral[700]
           })
         },
         {
           type: "bar",
-          label: 'Strømpris',
+          label: "Strømpris",
+          stack: "bar",
+          borderColor: records.value.map(item => {
+            if (item.HourDK.isSame(dayjs(), "hour")) return colors.red[300]
+          }),
+          borderWidth: records.value.map(item => {
+            if (item.HourDK.isSame(dayjs(), "hour")) return 2
+          }),
           data: priserUdenAfgift.value,
           backgroundColor: records.value.map(item => {
-            if (item.HourDK.isSame(dayjs(), "hour")) return colors.cyan[800]
-            else if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.3) return colors.green[600]
+            // if (item.HourDK.isSame(dayjs(), "hour")) return colors.cyan[800]
+            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.3) return colors.green[600]
             else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.9) return colors.orange[800]
             else return colors.neutral[600]
           })
-        },
+        }
       ]
     }
   })
@@ -130,15 +151,7 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div v-if="records === undefined">Henter data...</div>
+  <div v-if="records === undefined" class="animate-bounce">Henter data...</div>
   <div v-if="records === null">Fejl.</div>
   <canvas ref="chartRef"></canvas>
-  <!-- <table border="1">
-    <template v-for="item in records">
-      <tr>
-        <td>{{ item.HourDK.format('D/M HH:mm') }}</td>
-        <td>{{ item.SpotPriceEUR }}</td>
-      </tr>
-    </template>
-  </table>-->
 </template>
