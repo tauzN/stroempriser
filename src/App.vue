@@ -72,9 +72,9 @@ const drawChart = () => {
           type: "time",
           time: {
             unit: "hour",
-            tooltipFormat: "H",
+            tooltipFormat: "HH",
             displayFormats: {
-              hour: "H"
+              hour: "HH"
             }
           }
         },
