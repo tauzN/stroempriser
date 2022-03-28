@@ -1,17 +1,13 @@
 <script setup lang="ts">
+import { ref, onMounted, computed } from 'vue'
+import colors from 'tailwindcss/colors'
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-dayjs-3';
-import { ref, onMounted, computed } from 'vue'
+import { record } from './types'
+import { getData } from './util'
 import dayjs from 'dayjs';
 import 'dayjs/locale/da'
-import colors from 'tailwindcss/colors'
-import sampledata from './sampledata.json'
 dayjs.locale('da')
-type record = {
-  HourDK: dayjs.Dayjs
-  SpotPriceDKK: number
-  SpotPriceEUR: number
-}
 // https://n1.dk/priser-og-vilkaar
 const lavlast: number = 20.38
 const spidslast: number = 62.66
@@ -27,39 +23,7 @@ const prisMedAfgift = (record: record): number => (record.HourDK.month() >= 10 -
 const priserUdenAfgift = computed<number[]>(() => records.value.map(item => prisUdenAfgift(item)))
 const priserMedAfgift = computed<number[]>(() => records.value.map(item => prisMedAfgift(item)))
 const afgifter = computed<number[]>(() => records.value.map(item => prisMedAfgift(item) - prisUdenAfgift(item)))
-const getData = async (): Promise<record[]> => new Promise((resolve, reject) => {
-  const data = { "query": `query Dataset {elspotprices(where: {HourDK: {_gte: \"${dayjs().subtract(3, "hours").format("YYYY-MM-DDTHH:mm")}\"}PriceArea: {_eq: \"DK1\"}} order_by: {HourDK: asc} limit: 100){HourDK SpotPriceDKK SpotPriceEUR}}` }
-  fetch(`https://data-api.energidataservice.dk/v1/graphql`,
-    {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(raw => raw.json())
-    .then(json => json.data.elspotprices as record[])
-    .then(data => {
-      resolve(data.map(item => {
-        return {
-          HourDK: dayjs(item.HourDK),
-          SpotPriceDKK: item.SpotPriceDKK,
-          SpotPriceEUR: item.SpotPriceEUR,
-        }
-      }))
-    })
-    .catch((e) => {
-      records.value = null;
-      reject(e)
-    })
-  // resolve(sampledata.elspotprices.map(item => {
-  //   return {
-  //     HourDK: dayjs(item.HourDK),
-  //     SpotPriceDKK: item.SpotPriceDKK,
-  //     SpotPriceEUR: item.SpotPriceEUR,
-  //   }
-  // }))
-})
+const avg = (array: number[]): number => array.reduce((previousValue, currentValue) => (previousValue + currentValue / array.length), 0);
 const chartRef = ref(null)
 const drawChart = () => {
   new Chart(chartRef.value, {
@@ -95,20 +59,10 @@ const drawChart = () => {
           type: "line",
           pointRadius: 0,
           borderWidth: 2,
-          label: "Maks.",
-          data: [undefined, undefined, ...records.value.map(() => Math.max(...priserMedAfgift.value.slice(2)))],
+          label: "Gennemsnit",
+          data: [...records.value.map(() => avg(priserMedAfgift.value))],
           fill: false,
-          borderColor: colors.red[800],
-          stack: "0"
-        },
-        {
-          type: "line",
-          pointRadius: 0,
-          borderWidth: 2,
-          label: "Min.",
-          data: [undefined, undefined, ...records.value.map(() => Math.min(...priserMedAfgift.value.slice(2)))],
-          fill: false,
-          borderColor: colors.green[600],
+          borderColor: colors.blue[600],
           stack: "1"
         },
         {
@@ -117,9 +71,8 @@ const drawChart = () => {
           stack: "bar",
           data: afgifter.value,
           backgroundColor: records.value.map(item => {
-            // if (item.HourDK.isSame(dayjs(), "hour")) return colors.cyan[900]
-            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.3) return colors.green[700]
-            else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.9) return colors.orange[900]
+            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.2) return colors.green[700]
+            else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.8) return colors.orange[900]
             else return colors.neutral[700]
           })
         },
@@ -128,16 +81,15 @@ const drawChart = () => {
           label: "Strømpris",
           stack: "bar",
           borderColor: records.value.map(item => {
-            if (item.HourDK.isSame(dayjs(), "hour")) return colors.red[300]
+            if (item.HourDK.isSame(dayjs(), "hour")) return colors.neutral[200]
           }),
           borderWidth: records.value.map(item => {
-            if (item.HourDK.isSame(dayjs(), "hour")) return 2
+            if (item.HourDK.isSame(dayjs(), "hour")) return 1
           }),
           data: priserUdenAfgift.value,
           backgroundColor: records.value.map(item => {
-            // if (item.HourDK.isSame(dayjs(), "hour")) return colors.cyan[800]
-            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.3) return colors.green[600]
-            else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.9) return colors.orange[800]
+            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.2) return colors.green[600]
+            else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.8) return colors.orange[800]
             else return colors.neutral[600]
           })
         }
@@ -151,7 +103,9 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div v-if="records === undefined" class="animate-bounce">Henter data...</div>
-  <div v-if="records === null">Fejl.</div>
+  <div v-if="!records" class="h-screen flex items-center justify-center">
+    <div v-if="records === undefined" class="animate-pulse">Henter data...</div>
+    <div v-if="records === null">Fejl.</div>
+  </div>
   <canvas ref="chartRef"></canvas>
 </template>
