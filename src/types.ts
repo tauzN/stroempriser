@@ -1,6 +1,6 @@
-import {Dayjs} from 'dayjs'
+import * as dayjs from 'dayjs'
 export type record = {
-    HourDK: Dayjs
+    HourDK: dayjs.Dayjs
     SpotPriceDKK: number
     SpotPriceEUR: number
   }
