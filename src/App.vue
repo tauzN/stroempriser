@@ -106,7 +106,7 @@ onMounted(async () => {
     <div v-if="records === null">Fejl.</div>
   </div>
   <canvas ref="chartRef"></canvas>
-  <div class=" flex space-x-8 items-center justify-center">
+  <div class=" flex space-x-8 items-center justify-center flex-wrap">
     <div class="flex items-center space-x-2">
       <div class="bg-green-500 w-6 h-6"></div>
       <div>Billigst i perioden</div>
