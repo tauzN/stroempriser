@@ -60,9 +60,9 @@ const drawChart = () => {
           pointRadius: 0,
           borderWidth: 2,
           label: "Gennemsnit",
-          data: [...records.value.map(() => avg(priserMedAfgift.value))],
+          data: [undefined, undefined, ...records.value.map(() => avg(priserMedAfgift.value))],
           fill: false,
-          borderColor: colors.blue[600],
+          borderColor: colors.blue[800],
           stack: "1"
         },
         {
@@ -71,7 +71,7 @@ const drawChart = () => {
           stack: "bar",
           data: afgifter.value,
           backgroundColor: records.value.map(item => {
-            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.2) return colors.green[700]
+            if (prisMedAfgift(item) < Math.min(...priserMedAfgift.value.slice(2)) * 1.2) return colors.green[700]
             else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.8) return colors.orange[900]
             else return colors.neutral[700]
           })
@@ -80,15 +80,14 @@ const drawChart = () => {
           type: "bar",
           label: "Strømpris",
           stack: "bar",
-          borderColor: records.value.map(item => {
-            if (item.HourDK.isSame(dayjs(), "hour")) return colors.neutral[200]
-          }),
+          borderRadius: 10,
           borderWidth: records.value.map(item => {
             if (item.HourDK.isSame(dayjs(), "hour")) return 1
           }),
           data: priserUdenAfgift.value,
           backgroundColor: records.value.map(item => {
-            if (prisMedAfgift(item) < Math.max(...priserMedAfgift.value.slice(2)) * 0.2) return colors.green[600]
+            if (item.HourDK.isSame(dayjs(), "hour")) return colors.neutral[400]
+            else if (prisMedAfgift(item) < Math.min(...priserMedAfgift.value.slice(2)) * 1.2) return colors.green[600]
             else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.8) return colors.orange[800]
             else return colors.neutral[600]
           })
@@ -103,9 +102,12 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div v-if="!records" class="h-screen flex items-center justify-center">
+  <div v-if="!records" class="h-screen flex items-center justify-center text-lg">
     <div v-if="records === undefined" class="animate-pulse">Henter data...</div>
     <div v-if="records === null">Fejl.</div>
   </div>
   <canvas ref="chartRef"></canvas>
+  <div class=" flex items-center  space-x-6"><div class="bg-green-600 w-6 h-6"></div><div>Nedre 20%</div></div>
+  <div class=" flex items-center  space-x-6"><div class="bg-orange-700 w-6 h-6"></div><div>Øvre 20%</div></div>
+  <div class=" flex items-center  space-x-6"><div class="bg-blue-800 w-6 h-6"></div><div>Gennemsnit</div></div>
 </template>
