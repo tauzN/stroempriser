@@ -36,14 +36,11 @@ const drawChart = () => {
           type: "time",
           time: {
             unit: "hour",
-            tooltipFormat: "HH",
+            tooltipFormat: "DD/M HH:mm",
             displayFormats: {
               hour: "HH"
             }
           }
-        },
-        y: {
-          stacked: true,
         }
       },
       plugins: {
@@ -63,32 +60,34 @@ const drawChart = () => {
           data: [undefined, undefined, ...records.value.map(() => avg(priserMedAfgift.value))],
           fill: false,
           borderColor: colors.blue[800],
-          stack: "1"
         },
         {
           type: "bar",
           label: "Afgift",
-          stack: "bar",
           data: afgifter.value,
           backgroundColor: records.value.map(item => {
-            if (prisMedAfgift(item) < Math.min(...priserMedAfgift.value.slice(2)) * 1.2) return colors.green[700]
-            else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.8) return colors.orange[900]
+            if (item.HourDK.isSame(dayjs(), "hour")) return colors.neutral[500]
+            else if (prisMedAfgift(item) == Math.min(...priserMedAfgift.value.slice(2))) return colors.green[600]
+            else if (prisMedAfgift(item) == Math.max(...priserMedAfgift.value.slice(2))) return colors.orange[800]
+            else if (prisMedAfgift(item) < 100) return colors.green[700]
+            else if (prisMedAfgift(item) > 200) return colors.orange[900]
             else return colors.neutral[700]
           })
         },
         {
           type: "bar",
           label: "Strømpris",
-          stack: "bar",
           borderRadius: 10,
-          borderWidth: records.value.map(item => {
-            if (item.HourDK.isSame(dayjs(), "hour")) return 1
-          }),
+          // borderWidth: records.value.map(item => {
+          //   if (item.HourDK.isSame(dayjs(), "hour")) return 1
+          // }),
           data: priserUdenAfgift.value,
           backgroundColor: records.value.map(item => {
             if (item.HourDK.isSame(dayjs(), "hour")) return colors.neutral[400]
-            else if (prisMedAfgift(item) < Math.min(...priserMedAfgift.value.slice(2)) * 1.2) return colors.green[600]
-            else if (prisMedAfgift(item) > Math.max(...priserMedAfgift.value.slice(2)) * 0.8) return colors.orange[800]
+            else if (prisMedAfgift(item) == Math.min(...priserMedAfgift.value.slice(2))) return colors.green[500]
+            else if (prisMedAfgift(item) == Math.max(...priserMedAfgift.value.slice(2))) return colors.orange[700]
+            else if (prisMedAfgift(item) < 100) return colors.green[600]
+            else if (prisMedAfgift(item) > 200) return colors.orange[800]
             else return colors.neutral[600]
           })
         }
@@ -107,7 +106,26 @@ onMounted(async () => {
     <div v-if="records === null">Fejl.</div>
   </div>
   <canvas ref="chartRef"></canvas>
-  <div class=" flex items-center  space-x-6"><div class="bg-green-600 w-6 h-6"></div><div>Nedre 20%</div></div>
-  <div class=" flex items-center  space-x-6"><div class="bg-orange-700 w-6 h-6"></div><div>Øvre 20%</div></div>
-  <div class=" flex items-center  space-x-6"><div class="bg-blue-800 w-6 h-6"></div><div>Gennemsnit</div></div>
+  <div class=" flex space-x-8 items-center justify-center">
+    <div class="flex items-center space-x-2">
+      <div class="bg-green-500 w-6 h-6"></div>
+      <div>Billigst i perioden</div>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="bg-green-600 w-6 h-6"></div>
+      <div>Under 100 øre</div>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="bg-orange-700 w-6 h-6"></div>
+      <div>Over 200 øre</div>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="bg-orange-600 w-6 h-6"></div>
+      <div>Dyrest perioden</div>
+    </div>
+    <div class="flex items-center space-x-2">
+      <div class="bg-blue-800 w-6 h-6"></div>
+      <div>Gennemsnit i perioden</div>
+    </div>
+  </div>
 </template>
