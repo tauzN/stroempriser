@@ -106,25 +106,25 @@ onMounted(async () => {
     <div v-if="records === null">Fejl.</div>
   </div>
   <canvas ref="chartRef"></canvas>
-  <div class=" flex space-x-8 items-center justify-center flex-wrap">
+  <div class="p-4 text-sm flex space-x-8 space-y-2 items-center justify-center flex-wrap">
     <div class="flex items-center space-x-2">
-      <div class="bg-green-500 w-6 h-6"></div>
+      <div class="bg-green-500 w-4 h-4"></div>
       <div>Billigst i perioden</div>
     </div>
     <div class="flex items-center space-x-2">
-      <div class="bg-green-600 w-6 h-6"></div>
+      <div class="bg-green-600 w-4 h-4"></div>
       <div>Under 100 øre</div>
     </div>
     <div class="flex items-center space-x-2">
-      <div class="bg-orange-700 w-6 h-6"></div>
+      <div class="bg-orange-700 w-4 h-4"></div>
       <div>Over 200 øre</div>
     </div>
     <div class="flex items-center space-x-2">
-      <div class="bg-orange-600 w-6 h-6"></div>
+      <div class="bg-orange-600 w-4 h-4"></div>
       <div>Dyrest perioden</div>
     </div>
     <div class="flex items-center space-x-2">
-      <div class="bg-blue-800 w-6 h-6"></div>
+      <div class="bg-blue-800 w-4 h-4"></div>
       <div>Gennemsnit i perioden</div>
     </div>
   </div>
