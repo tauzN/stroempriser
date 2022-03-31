@@ -96,7 +96,9 @@ const drawChart = () => {
   })
 }
 onMounted(async () => {
+  // if (dayjs().isAfter(lo))
   records.value = await getData()
+  
   drawChart()
 })
 </script>
