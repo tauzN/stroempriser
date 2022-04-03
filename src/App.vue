@@ -89,7 +89,7 @@ const drawChart = () => {
           backgroundColor: records.value.map(item => {
             if (prisMedAfgift(item) == Math.min(...priserMedAfgift.value.slice(2))) return colors.green[600]
             else if (prisMedAfgift(item) == Math.max(...priserMedAfgift.value.slice(2))) return colors.orange[800]
-            else if (prisUdenAfgift(item) < avg30days.value * 0.5) return colors.green[700]
+            else if (prisUdenAfgift(item) < avg30days.value * 0.5) return colors.green[800]
             else if (prisUdenAfgift(item) > avg30days.value * 1.2) return colors.orange[900]
             else return colors.neutral[700]
           })
@@ -106,7 +106,7 @@ const drawChart = () => {
             if (prisMedAfgift(item) == Math.min(...priserMedAfgift.value.slice(2))) return colors.green[500]
             else if (prisMedAfgift(item) == Math.max(...priserMedAfgift.value.slice(2))) return colors.orange[700]
             else if (prisUdenAfgift(item) < avg30days.value * 0.5) return colors.green[700]
-            else if (prisUdenAfgift(item) > avg30days.value * 1.2) return colors.orange[900]
+            else if (prisUdenAfgift(item) > avg30days.value * 1.2) return colors.orange[800]
             else return colors.neutral[600]
           })
         }
