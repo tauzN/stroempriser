@@ -37,7 +37,7 @@ const drawChart = () => {
           type: "time",
           time: {
             unit: "hour",
-            tooltipFormat: "DD/M HH:mm",
+            tooltipFormat: "dddd [kl.] HH:mm",
             displayFormats: {
               hour: "HH"
             }
