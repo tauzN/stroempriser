@@ -1,6 +1,10 @@
-import * as dayjs from 'dayjs'
 export type record = {
-    HourDK: dayjs.Dayjs
-    SpotPriceDKK: number
-    SpotPriceEUR: number
-  }
+  datetime: Date;
+  price: number;
+};
+
+export type rawRecord = {
+  HourDK: string;
+  SpotPriceDKK: number;
+  SpotPriceEUR: number;
+};
