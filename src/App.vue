@@ -56,7 +56,7 @@ const drawChart = () => {
           annotations: {
             currentTime: {
               type: 'line',
-              borderColor: colors.neutral[200] + "55",
+              borderColor: colors.neutral[200] + "CC",
               // borderDash: [6, 6],
               borderWidth: 2,
               xScaleID: 'x',
@@ -67,7 +67,7 @@ const drawChart = () => {
               yScaleID: 'y',
               label: {
                 enabled: true,
-                content: "Nu",
+                content: dayjs().format("HH:mm"),
                 backgroundColor: colors.neutral[200] + "CC",
                 color: colors.neutral[800],
                 position: "end",
