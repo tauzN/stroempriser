@@ -24,7 +24,7 @@ const chartRef = ref(null)
 const avg = computed(() => {
   if (records.value != undefined) return AvgRecordPrice(records.value)
   else return ""
-  })
+})
 const last48Hours = () => records.value.slice(-36)
 const drawChart = () => {
   new Chart(chartRef.value, {
@@ -45,7 +45,7 @@ const drawChart = () => {
         },
         y: {
           stacked: true,
-          suggestedMax: 50 + Math.max(...last48Hours().map(item => item.price))
+          suggestedMax: 30 + Math.max(...last48Hours().map(item => item.price))
         }
       },
       plugins: {
@@ -60,14 +60,15 @@ const drawChart = () => {
               // borderDash: [6, 6],
               borderWidth: 2,
               xScaleID: 'x',
-              xMin: dayjs().add(30, "minutes").valueOf(),
-              xMax: dayjs().add(30, "minutes").valueOf(),
+              xMin: dayjs().subtract(30, "minutes").valueOf(),
+              xMax: dayjs().subtract(30, "minutes").valueOf(),
               yMin: 0,
-              yMax: Math.max(...last48Hours().map(item => item.price))+30,
+              // yMax: Math.max(...last48Hours().map(item => item.price)) + 30,
+              yMax: 1000,
               yScaleID: 'y',
               label: {
                 enabled: true,
-                content: dayjs().format("HH:mm"),
+                content: "Nu",
                 backgroundColor: colors.neutral[200] + "CC",
                 color: colors.neutral[800],
                 position: "end",
@@ -93,7 +94,8 @@ const drawChart = () => {
           label: "N1 A/S Afgift",
           data: last48Hours().map(item => afgift(item)),
           backgroundColor: last48Hours().map(item => {
-            if (item.price < AvgRecordPrice(records.value) * 0.5) return colors.green[800]
+            if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[500]
+            else if (item.price < AvgRecordPrice(records.value) * 0.5) return colors.green[800]
             else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[900]
             else return colors.neutral[700]
           })
@@ -104,7 +106,8 @@ const drawChart = () => {
           borderRadius: 5,
           data: last48Hours().map(item => item.price),
           backgroundColor: last48Hours().map(item => {
-            if (item.price < AvgRecordPrice(records.value) * 0.5) return colors.green[700]
+            if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[400]
+            else if (item.price < AvgRecordPrice(records.value) * 0.5) return colors.green[700]
             else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[800]
             else return colors.neutral[600]
           })
@@ -119,7 +122,12 @@ onMounted(async () => {
 })
 </script>
 <template>
-<div class="text-center text-sm mt-4 pb-4" v-if="records">Viser priser fra <b>{{dayjs(last48Hours()[0].datetime).format("dddd [kl.] HH:mm")}}</b> til <b>{{dayjs(last48Hours()[last48Hours().length-1].datetime).add(1, "hour").format("dddd [kl.] HH:mm")}}</b></div>
+  <div class="text-center text-sm mt-4 pb-4" v-if="records">
+    fra
+    <b>{{ dayjs(last48Hours()[0].datetime).format("dddd [kl.] HH:mm") }}</b>
+    til
+    <b>{{ dayjs(last48Hours()[last48Hours().length - 1].datetime).add(1, "hour").format("dddd [kl.] HH:mm") }}</b>
+  </div>
   <div v-if="!records" class="h-screen flex items-center justify-center text-lg">
     <div v-if="records === undefined" class="animate-pulse">Henter data...</div>
     <div v-if="records === null">Fejl.</div>
@@ -144,7 +152,7 @@ onMounted(async () => {
     </div>-->
     <div class="flex items-center gap-x-2">
       <div class="bg-blue-800 w-4 h-4"></div>
-      <div>30 dages gns. ({{Math.round(avg)}} øre)</div>
+      <div>30 dages gns. ({{ Math.round(avg) }} øre)</div>
     </div>
   </div>
 </template>
