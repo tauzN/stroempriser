@@ -45,7 +45,7 @@ const drawChart = () => {
         },
         y: {
           stacked: true,
-          suggestedMax: Math.max(...last48Hours().map(item => item.price))
+          suggestedMax: 50 + Math.max(...last48Hours().map(item => item.price))
         }
       },
       plugins: {
@@ -56,20 +56,27 @@ const drawChart = () => {
           annotations: {
             currentTime: {
               type: 'line',
-              borderColor: colors.neutral[500],
-              borderDash: [6, 6],
-              borderWidth: 1,
+              borderColor: colors.neutral[200] + "55",
+              // borderDash: [6, 6],
+              borderWidth: 2,
               xScaleID: 'x',
-              xMin: dayjs().startOf("hour").valueOf(),
-              xMax: dayjs().startOf("hour").valueOf(),
+              xMin: dayjs().add(30, "minutes").valueOf(),
+              xMax: dayjs().add(30, "minutes").valueOf(),
               yMin: 0,
-              yMax: 1000,
+              yMax: Math.max(...last48Hours().map(item => item.price))+30,
               yScaleID: 'y',
+              label: {
+                enabled: true,
+                content: "Nu",
+                backgroundColor: colors.neutral[200] + "CC",
+                color: colors.neutral[800],
+                position: "end",
+              }
             },
             avgPrice: {
               type: 'line',
               borderColor: colors.blue[500],
-              borderDash: [8, 4],
+              borderDash: [8, 8],
               borderWidth: 1,
               scaleID: 'y',
               value: AvgRecordPrice(records.value),
