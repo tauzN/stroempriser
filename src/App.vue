@@ -81,6 +81,41 @@ const drawChart = () => {
               borderWidth: 1,
               scaleID: 'y',
               value: AvgRecordPrice(records.value),
+            },
+            today: {
+              type: 'box',
+              backgroundColor: colors.neutral[200] + "05",
+              borderWidth: 1,
+              borderColor: colors.neutral[200] + "55",
+              xMax: dayjs(last48Hours()[12].datetime).subtract(30, "minutes").valueOf(),
+              label: {
+                color: colors.neutral[100],
+
+                drawTime: 'beforeDraw',
+                enabled: true,
+                content: dayjs(last48Hours()[0].datetime).format("dddd"),
+                position: {
+                  x: 'center',
+                  y: 'start'
+                }
+              }
+            },
+            tomorrow: {
+              type: 'box',
+              backgroundColor: colors.neutral[200] + "05",
+              borderWidth: 1,
+              borderColor: colors.neutral[200] + "55",
+              xMin: dayjs(last48Hours()[12].datetime).subtract(30, "minutes").valueOf(),
+              label: {
+                color: colors.neutral[100],
+                drawTime: 'beforeDraw',
+                enabled: true,
+                content: dayjs(last48Hours()[last48Hours().length - 1].datetime).format("dddd"),
+                position: {
+                  x: 'center',
+                  y: 'start'
+                }
+              }
             }
           }
         }
