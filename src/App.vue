@@ -14,8 +14,8 @@ const records = ref<record[] | null | undefined>(undefined)
 // https://n1.dk/priser-og-vilkaar
 // Lavlast: Alle dage i perioden april-september og alle dage i perioden oktober-marts kl. 00-17 og kl. 20-24.
 // Spidslast: Alle dage i perioden oktober-marts kl. 17-20.
-const lavlast: number = 20.38
-const spidslast: number = 62.66
+const lavlast: number = 25.97
+const spidslast: number = 74.42
 const afgift = (record: record): number => (dayjs(record.datetime).month() >= 10 - 1 || dayjs
   (record.datetime).month() <= 3 - 1) && (dayjs(record.datetime).hour() >= 17 && dayjs(record.datetime).hour() < 20)
   ? spidslast
@@ -56,9 +56,9 @@ const drawChart = () => {
           annotations: {
             currentTime: {
               type: 'line',
-              borderColor: colors.neutral[200] + "CC",
+              borderColor: colors.green[400] + "CC",
               // borderDash: [6, 6],
-              borderWidth: 2,
+              borderWidth: 1,
               xScaleID: 'x',
               xMin: dayjs().subtract(30, "minutes").valueOf(),
               xMax: dayjs().subtract(30, "minutes").valueOf(),
@@ -69,8 +69,8 @@ const drawChart = () => {
               label: {
                 enabled: true,
                 content: "Nu",
-                backgroundColor: colors.neutral[200] + "CC",
-                color: colors.neutral[800],
+                backgroundColor: colors.green[700] + "CC",
+                color: colors.neutral[100],
                 position: "end",
               }
             },
@@ -130,7 +130,7 @@ const drawChart = () => {
           data: last48Hours().map(item => afgift(item)),
           backgroundColor: last48Hours().map(item => {
             if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[500]
-            else if (item.price < AvgRecordPrice(records.value) * 0.5) return colors.green[800]
+            else if (item.price < AvgRecordPrice(records.value) * 0.4) return colors.green[800]
             else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[900]
             else return colors.neutral[700]
           })
@@ -142,7 +142,7 @@ const drawChart = () => {
           data: last48Hours().map(item => item.price),
           backgroundColor: last48Hours().map(item => {
             if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[400]
-            else if (item.price < AvgRecordPrice(records.value) * 0.5) return colors.green[700]
+            else if (item.price < AvgRecordPrice(records.value) * 0.4) return colors.green[700]
             else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[800]
             else return colors.neutral[600]
           })
@@ -157,12 +157,12 @@ onMounted(async () => {
 })
 </script>
 <template>
-  <div class="text-center text-sm mt-4 pb-4" v-if="records">
+  <!-- <div class="text-center text-sm mt-4 pb-4" v-if="records">
     fra
     <b>{{ dayjs(last48Hours()[0].datetime).format("dddd [kl.] HH:mm") }}</b>
     til
     <b>{{ dayjs(last48Hours()[last48Hours().length - 1].datetime).add(1, "hour").format("dddd [kl.] HH:mm") }}</b>
-  </div>
+  </div> -->
   <div v-if="!records" class="h-screen flex items-center justify-center text-lg">
     <div v-if="records === undefined" class="animate-pulse">Henter data...</div>
     <div v-if="records === null">Fejl.</div>
@@ -175,7 +175,7 @@ onMounted(async () => {
     </div>-->
     <div class="flex items-center gap-x-2">
       <div class="bg-green-600 w-4 h-4"></div>
-      <div>50% under gns.</div>
+      <div>60% under gns.</div>
     </div>
     <div class="flex items-center gap-x-2">
       <div class="bg-orange-700 w-4 h-4"></div>
