@@ -45,7 +45,7 @@ const drawChart = () => {
         },
         y: {
           stacked: true,
-          suggestedMax: 30 + Math.max(...last48Hours().map(item => item.price))
+          suggestedMax: 50 + Math.max(...last48Hours().map(item => item.price))
         }
       },
       plugins: {
@@ -68,10 +68,11 @@ const drawChart = () => {
               yScaleID: 'y',
               label: {
                 enabled: true,
-                content: "Nu",
+                content: Math.round(last48Hours().find(item => dayjs().isSame(item.datetime, "hour")).price) + " øre",
                 backgroundColor: colors.green[700] + "CC",
                 color: colors.neutral[100],
                 position: "end",
+                yAdjust: 15
               }
             },
             avgPrice: {
@@ -124,17 +125,17 @@ const drawChart = () => {
     data: {
       labels: last48Hours().map(item => item.datetime),
       datasets: [
-        {
-          type: "bar",
-          label: "N1 A/S Afgift",
-          data: last48Hours().map(item => afgift(item)),
-          backgroundColor: last48Hours().map(item => {
-            if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[500]
-            else if (item.price < AvgRecordPrice(records.value) * 0.4) return colors.green[800]
-            else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[900]
-            else return colors.neutral[700]
-          })
-        },
+        // {
+        //   type: "bar",
+        //   label: "N1 A/S Afgift",
+        //   data: last48Hours().map(item => afgift(item)),
+        //   backgroundColor: last48Hours().map(item => {
+        //     if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[500]
+        //     else if (item.price < AvgRecordPrice(records.value) * 0.4) return colors.green[800]
+        //     else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[900]
+        //     else return colors.neutral[700]
+        //   })
+        // },
         {
           type: "bar",
           label: "Strømpris",
