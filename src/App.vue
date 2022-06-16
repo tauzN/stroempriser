@@ -1,34 +1,27 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import colors from 'tailwindcss/colors'
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-dayjs-3';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { record } from './types'
-import { getLastDays, AvgRecordPrice } from './util'
+import { getLastDays, avg } from './util'
 import dayjs from 'dayjs';
 import 'dayjs/locale/da'
+import { afgifter} from './prices'
 Chart.register(annotationPlugin);
 dayjs.locale('da')
 const records = ref<record[] | null | undefined>(undefined)
-// https://n1.dk/priser-og-vilkaar
-// Lavlast: Alle dage i perioden april-september og alle dage i perioden oktober-marts kl. 00-17 og kl. 20-24.
-// Spidslast: Alle dage i perioden oktober-marts kl. 17-20.
-const lavlast: number = 25.97
-const spidslast: number = 74.42
-const afgift = (record: record): number => (dayjs(record.datetime).month() >= 10 - 1 || dayjs
-  (record.datetime).month() <= 3 - 1) && (dayjs(record.datetime).hour() >= 17 && dayjs(record.datetime).hour() < 20)
-  ? spidslast
-  : lavlast
-const chartRef = ref(null)
-const avg = computed(() => {
-  if (records.value != undefined) return AvgRecordPrice(records.value)
-  else return ""
+const chartRef = ref<HTMLCanvasElement>()
+const chart = ref<Chart>()
+const avgPrice = computed(() => {
+  if (!records.value) return 0
+  return Math.round(avg(records.value.map(item => item.price + afgifter)) * 100) / 100
 })
-const last48Hours = () => records.value.slice(-36)
+const last36Hours = () => records.value ? records.value.slice(-36) : []
 const drawChart = () => {
-  new Chart(chartRef.value, {
-    type: "bar",
+   chart.value = new Chart(chartRef.value as HTMLCanvasElement, {
+     type: "bar",
     options: {
       locale: "da-dk",
       scales: {
@@ -45,7 +38,7 @@ const drawChart = () => {
         },
         y: {
           stacked: true,
-          suggestedMax: 50 + Math.max(...last48Hours().map(item => item.price))
+          suggestedMax: 3 + Math.max(...last36Hours().map(item => item.price))
         }
       },
       plugins: {
@@ -56,19 +49,19 @@ const drawChart = () => {
           annotations: {
             currentTime: {
               type: 'line',
-              borderColor: colors.green[400] + "CC",
+              borderColor: colors.green[500] + "CC",
               // borderDash: [6, 6],
               borderWidth: 1,
               xScaleID: 'x',
               xMin: dayjs().subtract(30, "minutes").valueOf(),
               xMax: dayjs().subtract(30, "minutes").valueOf(),
               yMin: 0,
-              // yMax: Math.max(...last48Hours().map(item => item.price)) + 30,
+              // yMax: Math.max(...last36Hours()().map(item => item.price)) + 30,
               yMax: 1000,
               yScaleID: 'y',
               label: {
                 enabled: true,
-                content: Math.round(last48Hours().find(item => dayjs().isSame(item.datetime, "hour")).price) + " øre",
+                content: (last36Hours().find(item => dayjs().isSame(item.datetime, "hour")).price + afgifter).toLocaleString("da-dk") + " kr.",
                 backgroundColor: colors.green[700] + "CC",
                 color: colors.neutral[100],
                 position: "end",
@@ -81,20 +74,28 @@ const drawChart = () => {
               borderDash: [8, 8],
               borderWidth: 1,
               scaleID: 'y',
-              value: AvgRecordPrice(records.value),
+              value: avgPrice.value,
+            },
+            afgifter: {
+              type: 'line',
+              borderColor: colors.gray[500],
+              // borderDash: [8, 8],
+              borderWidth: 1,
+              scaleID: 'y',
+              value: afgifter,
             },
             today: {
               type: 'box',
               backgroundColor: colors.neutral[200] + "05",
               borderWidth: 1,
               borderColor: colors.neutral[200] + "55",
-              xMax: dayjs(last48Hours()[12].datetime).subtract(30, "minutes").valueOf(),
+              xMax: dayjs(last36Hours()[12].datetime).subtract(30, "minutes").valueOf(),
               label: {
                 color: colors.neutral[100],
 
                 drawTime: 'beforeDraw',
                 enabled: true,
-                content: dayjs(last48Hours()[0].datetime).format("dddd"),
+                content: dayjs(last36Hours()[0].datetime).format("dddd"),
                 position: {
                   x: 'center',
                   y: 'start'
@@ -106,12 +107,12 @@ const drawChart = () => {
               backgroundColor: colors.neutral[200] + "05",
               borderWidth: 1,
               borderColor: colors.neutral[200] + "55",
-              xMin: dayjs(last48Hours()[12].datetime).subtract(30, "minutes").valueOf(),
+              xMin: dayjs(last36Hours()[12].datetime).subtract(30, "minutes").valueOf(),
               label: {
                 color: colors.neutral[100],
                 drawTime: 'beforeDraw',
                 enabled: true,
-                content: dayjs(last48Hours()[last48Hours().length - 1].datetime).format("dddd"),
+                content: dayjs(last36Hours()[last36Hours().length - 1].datetime).format("dddd"),
                 position: {
                   x: 'center',
                   y: 'start'
@@ -123,72 +124,61 @@ const drawChart = () => {
       }
     },
     data: {
-      labels: last48Hours().map(item => item.datetime),
+      labels: last36Hours().map(item => item.datetime),
       datasets: [
-        // {
-        //   type: "bar",
-        //   label: "N1 A/S Afgift",
-        //   data: last48Hours().map(item => afgift(item)),
-        //   backgroundColor: last48Hours().map(item => {
-        //     if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[500]
-        //     else if (item.price < AvgRecordPrice(records.value) * 0.4) return colors.green[800]
-        //     else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[900]
-        //     else return colors.neutral[700]
-        //   })
-        // },
         {
           type: "bar",
-          label: "Strømpris",
+          label: "",
           borderRadius: 5,
-          data: last48Hours().map(item => item.price),
-          backgroundColor: last48Hours().map(item => {
+          data: last36Hours().map(item => (item.price + afgifter )),
+          backgroundColor: last36Hours().map(item => {
             if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[400]
-            else if (item.price < AvgRecordPrice(records.value) * 0.4) return colors.green[700]
-            else if (item.price > AvgRecordPrice(records.value) * 1.2) return colors.orange[800]
+            else if (item.price < 0) return colors.green[500]
+            else if (item.price < avg(records.value.map(item => item.price)) * 0.4) return colors.green[700]
+            else if (item.price > avg(records.value.map(item => item.price)) * 1.2) return colors.orange[900]
             else return colors.neutral[600]
           })
         }
       ]
     }
   })
+  
 }
 onMounted(async () => {
-  records.value = await getLastDays(30);
+  records.value = await getLastDays(30);  
   drawChart();
 })
 </script>
 <template>
-  <!-- <div class="text-center text-sm mt-4 pb-4" v-if="records">
-    fra
-    <b>{{ dayjs(last48Hours()[0].datetime).format("dddd [kl.] HH:mm") }}</b>
-    til
-    <b>{{ dayjs(last48Hours()[last48Hours().length - 1].datetime).add(1, "hour").format("dddd [kl.] HH:mm") }}</b>
-  </div> -->
+  <div class=" text-center text-xs">
+    Viser elpriser med afgifter ved årsforbrug på 2.000 kWh hos N1 A/S
+  </div>
   <div v-if="!records" class="h-screen flex items-center justify-center text-lg">
     <div v-if="records === undefined" class="animate-pulse">Henter data...</div>
     <div v-if="records === null">Fejl.</div>
   </div>
   <canvas class ref="chartRef"></canvas>
-  <div class="p-4 text-sm flex gap-x-8 gap-y-2 items-center justify-center flex-wrap">
-    <!-- <div class="flex items-center gap-x-2">
-      <div class="bg-green-500 w-4 h-4"></div>
-      <div>Billigst</div>
-    </div>-->
+  <div class="p-4 text-xs flex gap-x-8 gap-y-2 items-center justify-center flex-wrap">
     <div class="flex items-center gap-x-2">
-      <div class="bg-green-600 w-4 h-4"></div>
+      <div class="bg-green-600 w-2 h-4"></div>
       <div>60% under gns.</div>
     </div>
     <div class="flex items-center gap-x-2">
-      <div class="bg-orange-700 w-4 h-4"></div>
+      <div class="bg-green-400 w-2 h-4"></div>
+      <div>elpris under 0 øre</div>
+    </div>
+    <div class="flex items-center gap-x-2">
+      <div class="bg-orange-900 w-2 h-4"></div>
       <div>20% over gns.</div>
     </div>
-    <!-- <div class="flex items-center gap-x-2">
-      <div class="bg-orange-600 w-4 h-4"></div>
-      <div>Dyrest</div>
-    </div>-->
     <div class="flex items-center gap-x-2">
-      <div class="bg-blue-800 w-4 h-4"></div>
-      <div>30 dages gns. ({{ Math.round(avg) }} øre)</div>
+      <div class="bg-gray-500 w-3 h-1"></div>
+      <div>Afgifter ({{afgifter.toLocaleString("da-dk")}} kr.)</div>
+    </div>
+    <div class="flex items-center gap-x-2">
+      <div class="bg-blue-600 w-4 h-1"></div>
+      <div>30 dages gns. ({{ avgPrice.toLocaleString("da-dk") }} kr.)
+        </div>
     </div>
   </div>
 </template>

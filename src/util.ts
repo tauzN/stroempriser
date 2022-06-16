@@ -1,25 +1,19 @@
 import { rawRecord, record } from "./types";
 import dayjs from "dayjs";
 
-const avg = (array: number[]): number =>
+export const avg = (array: number[]): number =>
   array.reduce(
     (previousValue, currentValue) =>
       previousValue + currentValue / array.length,
     0
   );
 
-/**
- * @param records record array
- * @returns avarange price of record.price
- */
-export const AvgRecordPrice = (records:record[]): number => avg(records.map((item) => item.price))
-
   /**
    * Rådata priser er i DKK/MWh
    * @param DKKMWh - Price in DKK/MWh
    * @returns price in Øre/KWh
    */
-const DKKMWhToOreKWh = (DKKMWh: number) => (DKKMWh / 1_000) * 100;
+const DKKMWh_to_DKKkWh = (DKK: number) => DKK / 1_000;
 
 /**
  * @param days number of days to get data for
@@ -48,7 +42,7 @@ export const getLastDays = async (days: number): Promise<record[]> =>
           data.map((item) => {
             return {
               // SpotPriceDKK er null i weekenden og omregnes derfor fra SpotPriceEUR
-              price: DKKMWhToOreKWh(item.SpotPriceDKK || item.SpotPriceEUR * 7.44),
+              price: Math.round(DKKMWh_to_DKKkWh(item.SpotPriceDKK || item.SpotPriceEUR * 7.44) * 1.25 *100)/100,
               datetime: dayjs(item.HourDK).toDate(),
             };
           })
