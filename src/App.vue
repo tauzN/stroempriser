@@ -145,40 +145,43 @@ const drawChart = () => {
   
 }
 onMounted(async () => {
+ 
   records.value = await getLastDays(30);  
   drawChart();
 })
 </script>
 <template>
-  <div class=" text-center text-xs">
-    Viser elpriser med afgifter ved årsforbrug på 2.000 kWh hos N1 A/S
-  </div>
-  <div v-if="!records" class="h-screen flex items-center justify-center text-lg">
-    <div v-if="records === undefined" class="animate-pulse">Henter data...</div>
-    <div v-if="records === null">Fejl.</div>
-  </div>
-  <canvas class ref="chartRef"></canvas>
-  <div class="p-4 text-xs flex gap-x-8 gap-y-2 items-center justify-center flex-wrap">
-    <div class="flex items-center gap-x-2">
-      <div class="bg-green-600 w-2 h-4"></div>
-      <div>60% under gns.</div>
+  <div class="p-4">
+    <div class=" text-center text-xs">
+      Viser elpriser med afgifter ved årsforbrug på 3.000 kWh hos N1 A/S
     </div>
-    <div class="flex items-center gap-x-2">
-      <div class="bg-green-400 w-2 h-4"></div>
-      <div>elpris under 0 øre</div>
+    <div v-if="!records" class="h-screen flex items-center justify-center text-lg">
+      <div v-if="records === undefined" class="animate-pulse">Henter data...</div>
+      <div v-if="records === null">Fejl.</div>
     </div>
-    <div class="flex items-center gap-x-2">
-      <div class="bg-orange-900 w-2 h-4"></div>
-      <div>20% over gns.</div>
-    </div>
-    <div class="flex items-center gap-x-2">
-      <div class="bg-gray-500 w-3 h-1"></div>
-      <div>Afgifter ({{afgifter.toLocaleString("da-dk")}} kr.)</div>
-    </div>
-    <div class="flex items-center gap-x-2">
-      <div class="bg-blue-600 w-4 h-1"></div>
-      <div>30 dages gns. ({{ avgPrice.toLocaleString("da-dk") }} kr.)
-        </div>
+    <canvas class ref="chartRef"></canvas>
+    <div class="p-4 text-xs flex gap-x-8 gap-y-2 items-center justify-center flex-wrap">
+      <div class="flex items-center gap-x-2">
+        <div class="bg-green-600 w-2 h-4"></div>
+        <div>60% under gns.</div>
+      </div>
+      <div class="flex items-center gap-x-2">
+        <div class="bg-green-400 w-2 h-4"></div>
+        <div>elpris under 0 øre</div>
+      </div>
+      <div class="flex items-center gap-x-2">
+        <div class="bg-orange-900 w-2 h-4"></div>
+        <div>20% over gns.</div>
+      </div>
+      <div class="flex items-center gap-x-2">
+        <div class="bg-gray-500 w-3 h-1"></div>
+        <div>Afgifter ({{afgifter.toLocaleString("da-dk")}} kr.)</div>
+      </div>
+      <div class="flex items-center gap-x-2">
+        <div class="bg-blue-600 w-4 h-1"></div>
+        <div>30 dages gns. ({{ avgPrice.toLocaleString("da-dk") }} kr.)
+          </div>
+      </div>
     </div>
   </div>
 </template>
