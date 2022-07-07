@@ -10,10 +10,10 @@ export default ({ mode }) => {
     plugins: [vue()],
     server: {
       host: process.env.VITE_LOCAL_HOST,
-      https: process.env.NODE_ENV !== "development" ? {
+      https: process.env.NODE_ENV === "production" ? {} : {
         key: fs.readFileSync("../" + process.env.VITE_LOCAL_HOST + "-key.pem"),
         cert: fs.readFileSync("../" + process.env.VITE_LOCAL_HOST + ".pem")
-      } : {}
+      }
     }
   })
 }
