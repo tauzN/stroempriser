@@ -9,8 +9,8 @@ import { record } from './types';
 import {avg} from './util'
 Chart.register(annotationPlugin);
 const props = defineProps<{
-    records: record[]
-    afgifter:number
+    records: record[],
+    afgifter:number,
     avgPrice: number
 }>()
 const chartRef = ref<HTMLCanvasElement>()

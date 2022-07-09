@@ -6,7 +6,7 @@ const power = ref<number>(2300)
 const currentBattery = ref<number>(50.0)
 const wantedBattery = ref<number>(80.0)
 const hoursToCharge = computed<number>(() => {
-    return ((wantedBattery.value - currentBattery.value) * 0.32 / 2.25)
+    return ((wantedBattery.value - currentBattery.value) * (batterySize.value/100) / (power.value/1000))
 })
 </script>
 <template>
