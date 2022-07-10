@@ -1,10 +1,5 @@
 <template>
-  <router-view v-slot="{ Component }">
-    <transition>
-      <keep-alive>
-        <component :is="Component" />
-      </keep-alive>
-    </transition>
+  <router-view>
   </router-view>
   <div class=" fixed bottom-0 bg-gray-800 w-full h-10 flex items-center justify-evenly">
     <router-link to="/">Priser</router-link>
