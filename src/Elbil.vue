@@ -21,79 +21,56 @@ const hoursToCharge = computed<number>(() => {
                 State of Charge
                 <select v-model.number="currentBattery" class="bg-black">
                     <template v-for="num in 100">
-                        <option :value="num">{{num}}</option>
+                        <option :value="num">{{ num }}</option>
                     </template>
                 </select>
                 %
             </label>
         </section>
-        <section class="flex flex-col">
+        <section class="">
             <h2>Strøm</h2>
             <div class="flex">
-                <div class="w-1/2 flex items-center justify-center">
+                <div class="w-1/3 flex items-center justify-center">
                     <label>
-                        <input type="number" v-model="power" class="bg-black w-24">
+                        <input type="number" v-model.number="power" class="bg-black w-24">
                     </label>
                 </div>
-                <div class="w-1/2 flex flex-wrap">
-                    <label class=" w-1/2">
-                        <input type="radio" name="power" :value="5*230" v-model.number="power" />
-                        <span class="w-16">5A</span>
-                    </label>
-                    <label class=" w-1/2">
-                        <input type="radio" name="power" :value="10*230" v-model.number="power" />
-                        <span class="w-16">10A</span>
-                    </label>
-                    <label class=" w-1/2">
-                        <input type="radio" name="power" :value="7000" v-model.number="power" />
-                        <span class="w-16">7kW</span>
-                    </label>
-                    <label class=" w-1/2">
-                        <input type="radio" name="power" :value="40000" v-model.number="power" />
-                        <span class="w-16">40kW</span>
-                    </label>
+                <div class="w-2/3 flex flex-wrap">
+                    <template v-for="num in [
+                        { text: '5 A', val: 5 * 230 },
+                        { text: '10 A', val: 10 * 230 },
+                        { text: '7 kW', val: 7000 },
+                        { text: '40 kW', val: 40000 }
+                    ]">
+                        <label class=" w-1/2">
+                            <input type="radio" name="power" :value="num.val" v-model.number="power" />
+                            <span class="w-20">{{ num.text }}</span>
+                        </label>
+                    </template>
                 </div>
             </div>
         </section>
-        <section class="flex flex-col">
+        <section class="">
             <h2>Opladning</h2>
             <div class=" flex">
                 <div class="w-1/3 flex flex-col justify-around">
                     <label>
                         <select class="bg-black" v-model.number="wantedBattery">
-                        <template v-for="num in 100">
-                        <option :value="num">{{num}}</option>
-                        </template>
+                            <template v-for="num in 100">
+                                <option :value="num">{{ num }}</option>
+                            </template>
                         </select>
                     </label>
-                    <div>{{Math.round(batterySize*wantedBattery/100*7)}} km</div>
-                    <div>({{Math.round(1000/7)}} Wh/km)</div>
+                    <div class="text-xs">{{ Math.round(batterySize * wantedBattery / 100 * 7) }} km</div>
+                    <div class="text-xs">({{ Math.round(1000 / 7) }} Wh/km)</div>
                 </div>
                 <div class="w-2/3">
-                    <label name="wantedbattery">
-                        <input type="radio" :value="50" v-model.number="wantedBattery">
-                        <span class="w-12">50</span>
-                    </label>
-                    <label name="wantedbattery">
-                        <input type="radio" :value="60" v-model.number="wantedBattery">
-                        <span class="w-12">60</span>
-                    </label>
-                    <label name="wantedbattery">
-                        <input type="radio" :value="70" v-model.number="wantedBattery">
-                        <span class="w-12">70</span>
-                    </label>
-                    <label name="wantedbattery">
-                        <input type="radio" :value="80" v-model.number="wantedBattery">
-                        <span class="w-12">80</span>
-                    </label>
-                    <label name="wantedbattery">
-                        <input type="radio" :value="90" v-model.number="wantedBattery">
-                        <span class="w-12">90</span>
-                    </label>
-                    <label name="wantedbattery">
-                        <input type="radio" :value="100" v-model.number="wantedBattery">
-                        <span class="w-12">100</span>
-                    </label>
+                    <template v-for="num in [50, 60, 70, 80, 90, 100]">
+                        <label name="wantedbattery">
+                            <input type="radio" :value="num" v-model.number="wantedBattery">
+                            <span class="w-12">{{ num }}</span>
+                        </label>
+                    </template>
                 </div>
             </div>
         </section>
@@ -101,29 +78,30 @@ const hoursToCharge = computed<number>(() => {
 
             <div class="font-semibold text-xl">
                 {{ Math.round(hoursToCharge) }} timer {{ Math.round(hoursToCharge * 60 % 60) }} minutter
-        </div>
-            </section>
+            </div>
+        </section>
     </div>
 </template>
 <style scoped>
 section {
-    @apply bg-gray-800 rounded py-4 m-2 w-80
+    @apply bg-gray-800 rounded py-4 m-2 w-80;
 }
 
 section h2 {
-    @apply text-lg mb-2
+    @apply text-lg mb-2;
 }
 
-input, select {
-    @apply rounded border border-gray-700
+input,
+select {
+    @apply rounded border border-gray-700;
 }
 
 input[type="radio"] {
-    @apply hidden
+    @apply hidden;
 }
 
 input[type="radio"]~span {
-    @apply inline-block p-2 border border-gray-600 mt-2 mx-2 bg-gray-800;
+    @apply inline-block p-1 border border-gray-600 m-2 bg-gray-800;
 }
 
 input[type="radio"]:checked~span {
