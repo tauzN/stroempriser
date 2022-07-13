@@ -5,6 +5,7 @@
     <router-link to="/">Priser</router-link>
     <router-link to="/elbil">Opladning</router-link>
   </div>
+    <div class="h-10"></div>
 </template>
 <style scoped>
 a {
