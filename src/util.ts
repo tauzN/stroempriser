@@ -21,46 +21,34 @@ const DKKMWh_to_DKKkWh = (DKK: number) => DKK / 1_000;
  */
 export const getLastDays = async (days: number): Promise<record[]> =>
   new Promise((resolve, reject) => {
-    var prices: any = JSON.parse(sessionStorage.getItem("prices"))
-    if (prices) {
-      resolve(prices);
-    } else {
-      const data = {
-        query: `query Dataset {elspotprices(where: {HourDK: {_gte: \"${dayjs()
-          .subtract(days, "days")
-          .format(
-            "YYYY-MM-DDThh:mm"
-          )}\"}PriceArea: {_eq: \"DK1\"}} order_by: {HourDK: asc} limit: 1000){HourDK SpotPriceDKK SpotPriceEUR}}`,
-      };
-      fetch(`https://data-api.energidataservice.dk/v1/graphql`, {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((raw) => raw.json())
-        .then((json) => json.data.elspotprices)
-        .then((data: rawRecord[]) => {
-          prices = data.map((item) => {
-            return {
-              // SpotPriceDKK er null i weekenden og omregnes derfor fra SpotPriceEUR
-              price:
-                Math.round(
-                  DKKMWh_to_DKKkWh(
-                    item.SpotPriceDKK || item.SpotPriceEUR * 7.44
-                  ) *
-                    1.25 *
-                    100
-                ) / 100,
-              datetime: dayjs(item.HourDK).toDate(),
-            };
-          });
-          sessionStorage.setItem("prices", JSON.stringify(prices));
-          resolve(prices);
-        })
-        .catch((e) => {
-          reject(e);
-        });
+    const filter = {
+      "PriceArea": "DK1"
     }
+    const params = new URLSearchParams({
+      "filter": JSON.stringify(filter),
+      "limit": (24 * days).toString()
+    })
+    fetch("https://api.energidataservice.dk/dataset/Elspotprices?"+params)
+    .then((raw) => raw.json())
+    .then((json) => json.records as rawRecord[])
+    .then((data) => {      
+      let prices = data.map((item) => {
+        return {
+          // SpotPriceDKK er null i weekenden og omregnes derfor fra SpotPriceEUR
+          price:
+            Math.round(
+              DKKMWh_to_DKKkWh(
+                item.SpotPriceDKK || item.SpotPriceEUR * 7.44
+              ) *
+                1.25 *
+                100
+            ) / 100,
+          datetime: dayjs(item.HourDK).toDate(),
+        };
+      });
+      resolve(prices.reverse());
+    })
+    .catch((e) => {
+      reject(e);
+    });
   });
