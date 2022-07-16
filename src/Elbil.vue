@@ -1,12 +1,33 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
+import { computed, onBeforeMount, ref, watch } from 'vue';
 const batterySize = ref<number>(32)
 const power = ref<number>(2300)
-const currentBattery = ref<number>(50.0)
+const stateOfCharge = ref<number>(50.0)
 const wantedBattery = ref<number>(80.0)
 const hoursToCharge = computed<number>(() => {
-    return ((wantedBattery.value - currentBattery.value) * (batterySize.value / 100) / (power.value / 1000))
+    return ((wantedBattery.value - stateOfCharge.value) * (batterySize.value / 100) / (power.value / 1000))
+})
+watch(batterySize, value => {
+    console.log(value);
+    localStorage.setItem("batterySize", value.toString())
+})
+watch(power, value => {
+    console.log(value);
+    localStorage.setItem("power", value.toString())
+})
+watch(stateOfCharge, value => {
+    console.log(value);
+    localStorage.setItem("stateOfCharge", value.toString())
+})
+watch(wantedBattery, value => {
+    console.log(value);
+    localStorage.setItem("wantedBattery", value.toString())
+})
+onBeforeMount(() => {
+    batterySize.value = Number(localStorage.getItem("batterySize")) || batterySize.value
+    power.value = Number(localStorage.getItem("power")) || power.value
+    stateOfCharge.value = Number(localStorage.getItem("stateOfCharge")) || stateOfCharge.value
+    wantedBattery.value = Number(localStorage.getItem("wantedBattery")) || wantedBattery.value
 })
 </script>
 <template>
@@ -19,7 +40,7 @@ const hoursToCharge = computed<number>(() => {
             </label>
             <label>
                 State of Charge
-                <select v-model.number="currentBattery" class="bg-black">
+                <select v-model.number="stateOfCharge" class="bg-black">
                     <template v-for="num in 100">
                         <option :value="num">{{ num }}</option>
                     </template>
@@ -66,8 +87,8 @@ const hoursToCharge = computed<number>(() => {
                 </div>
                 <div class="w-2/3">
                     <template v-for="num in [50, 60, 70, 80, 90, 100]">
-                        <label name="wantedbattery">
-                            <input type="radio" :value="num" v-model.number="wantedBattery">
+                        <label>
+                            <input type="radio" name="wantedbattery" :value="num" v-model.number="wantedBattery">
                             <span class="w-12">{{ num }}</span>
                         </label>
                     </template>
