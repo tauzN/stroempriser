@@ -98,7 +98,9 @@ onBeforeMount(() => {
         <section>
 
             <div class="font-semibold text-xl">
-                {{ Math.round(hoursToCharge) }} timer {{ Math.round(hoursToCharge * 60 % 60) }} minutter
+                {{ Math.trunc(hoursToCharge) }} {{ Math.trunc(hoursToCharge) === 1 ? 'time' : 'timer' }} {{
+                        Math.ceil((hoursToCharge * 60) % 60)
+                }} minutter
             </div>
         </section>
     </div>
