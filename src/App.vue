@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch, onBeforeMount } from 'vue'
 import { record } from './types'
 import { getLastDays, avg } from './util'
 import dayjs from 'dayjs';
@@ -14,7 +14,11 @@ const avgPrice = computed(() => {
 })
 const last36Hours = () => records.value ? records.value.slice(-36) : []
 const visMedAfgifter = ref<boolean>(false)
-onMounted(async () => {
+watch(visMedAfgifter, value =>{
+  localStorage.setItem("visMedAfgifter", JSON.stringify(value))
+})
+onBeforeMount(async()=> {
+  visMedAfgifter.value = JSON.parse(localStorage.getItem("visMedAfgifter") as string) || visMedAfgifter.value
   records.value = await getLastDays(30);
 })
 </script>
