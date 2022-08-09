@@ -5,6 +5,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import dayjs from 'dayjs';
 import colors from 'tailwindcss/colors'
 import { ref, onMounted } from 'vue';
+import { afgifter } from './prices';
 import { record } from './types';
 import { avg } from './util'
 Chart.register(annotationPlugin);
@@ -128,11 +129,7 @@ const drawChart = () => {
                     borderRadius: 5,
                     data: props.records.map(item => (item.price + props.afgifter)),
                     backgroundColor: props.records.map(item => {
-                        if (dayjs().isSame(item.datetime, "hour")) return colors.neutral[400]
-                        else if (item.price < 0) return colors.green[500]
-                        else if (item.price < avg(props.records.map(item => item.price)) * 0.4) return colors.green[700]
-                        else if (item.price > avg(props.records.map(item => item.price)) * 1.2) return colors.orange[900]
-                        else return colors.neutral[600]
+                        return `hsl(${120-(item.price-afgifter)/3*120} 60% 30%)`
                     })
                 }
             ]
