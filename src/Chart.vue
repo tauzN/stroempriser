@@ -67,7 +67,7 @@ const drawChart = () => {
                         },
                         avgPrice: {
                             type: 'line',
-                            borderColor: colors.blue[500],
+                            borderColor: colors.blue[400],
                             borderDash: [8, 8],
                             borderWidth: 1,
                             scaleID: 'y',
@@ -75,7 +75,7 @@ const drawChart = () => {
                         },
                         afgifter: {
                             type: 'line',
-                            borderColor: colors.gray[500],
+                            borderColor: colors.gray[200],
                             // borderDash: [8, 8],
                             borderWidth: 1,
                             scaleID: 'y',
@@ -129,7 +129,7 @@ const drawChart = () => {
                     borderRadius: 5,
                     data: props.records.map(item => (item.price + props.afgifter)),
                     backgroundColor: props.records.map(item => {
-                        return `hsl(${120-(item.price-afgifter)/3*120} 60% 30%)`
+                        return `hsl(${120 - item.price / 6 * 120} 50% 40%)`
                     })
                 }
             ]

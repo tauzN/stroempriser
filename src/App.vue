@@ -26,20 +26,12 @@ onBeforeMount(async()=> {
   <div class="p-4">
     <div class="p-4 text-xs flex gap-x-8 gap-y-2 items-center justify-center flex-wrap">
       <div class="flex items-center gap-x-2">
-        <div class="bg-green-600 w-2 h-4"></div>
-        <div>60% under gns.</div>
-      </div>
-      <div class="flex items-center gap-x-2">
-        <div class="bg-orange-900 w-2 h-4"></div>
-        <div>20% over gns.</div>
-      </div>
-      <div class="flex items-center gap-x-2">
         <div class="bg-gray-500 w-3 h-1"></div>
         <div>Afgifter ({{ afgifter.toLocaleString("da-dk") }} kr.)</div>
       </div>
       <div class="flex items-center gap-x-2">
         <div class="bg-blue-600 w-4 h-1"></div>
-        <div>30 dages gns. ({{ avgPrice.toLocaleString("da-dk") }} kr.)
+        <div>30 dages gns. ({{ ((visMedAfgifter ? afgifter: 0 ) + avgPrice).toLocaleString("da-dk") }} kr.)
         </div>
       </div>
     </div>
