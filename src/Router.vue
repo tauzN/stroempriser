@@ -4,8 +4,9 @@
       <component :is="Component" />
     </KeepAlive>
   </router-view>
-  <div class=" fixed bottom-0 left-0 bg-gray-800 w-full h-10 flex items-center justify-evenly">
+  <div class=" text-xs fixed bottom-0 left-0 bg-gray-800 w-full h-10 flex items-center justify-evenly">
     <router-link to="/">Priser</router-link>
+    <router-link to="/elpriser">Priser v2</router-link>
     <router-link to="/elbil">Opladning</router-link>
   </div>
   <div class="h-10"></div>

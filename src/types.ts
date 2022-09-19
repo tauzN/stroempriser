@@ -1,5 +1,11 @@
 export type record = {
+  /**
+   * 
+   */
   datetime: Date;
+  /**
+   * Floating point in DKK/kWh
+   */
   price: number;
 };
 
