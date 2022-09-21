@@ -32,7 +32,7 @@ export const getLastDays = async (days: number): Promise<record[]> =>
       .then((raw) => raw.json())
       .then((json) => json.records as rawRecord[])
       .then((data) => {
-        let prices : record[] = data.map((item) => {
+        let prices: record[] = data.map((item) => {
           return {
             // SpotPriceDKK er null i weekenden og omregnes derfor fra SpotPriceEUR
             price:
@@ -40,8 +40,8 @@ export const getLastDays = async (days: number): Promise<record[]> =>
                 DKKMWh_to_DKKkWh(
                   item.SpotPriceDKK || item.SpotPriceEUR * 7.44
                 ) *
-                  1.25 *
-                  100
+                1.25 *
+                100
               ) / 100,
             datetime: dayjs(item.HourDK).toDate(),
           };

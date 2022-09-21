@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch, onBeforeMount } from 'vue'
 import { record } from './types'
-import { getLastDays, avg } from './util'
+import { avg, getLastDays } from './util'
 import dayjs from 'dayjs';
 import 'dayjs/locale/da'
 import { afgifter } from './prices'
