@@ -7,8 +7,8 @@
                     <div class="">{{dayjs(item.datetime).format("HH")}}</div>
                 </div>
                 <div class="w-full py-[1px] z-30">
-                    <div class=" rounded-r-full pl-2 flex  justify-between"
-                        :style="`background-color: ${barColor(item.price)}; ` + `width: ${barLength(item.price)}%`">
+                    <div class=" rounded-full border pl-2 flex  justify-between"
+                        :style="`border-color: ${barColor(item.price)}; ` + `width: ${barLength(item.price)}%`">
                         <span>
                             {{(afgifter + item.price).toLocaleString("da-dk",
                             {minimumFractionDigits:2, maximumFractionDigits:2})}}
@@ -20,9 +20,9 @@
                 </div>
                 <div class="absolute border-t w-full border-blue-400/50 z-20 animate-pulse"
                     v-if="isSameHour(item.datetime)"></div>
-                <div class="absolute h-4 w-full z-20 opacity-30" :style="'background-color: ' + barColor(item.price)"
+                <div class="absolute h-4 w-full z-20 opacity-20" :style="'background-color: ' + barColor(item.price)"
                     v-if="item.price === min(last36Hours.map(item => item.price))"></div>
-                <div class="absolute h-4 w-full z-20 opacity-30" :style="'background-color: ' + barColor(item.price)"
+                <div class="absolute h-4 w-full z-20 opacity-20" :style="'background-color: ' + barColor(item.price)"
                     v-if="item.price === max(last36Hours.map(item => item.price))">
                 </div>
             </div>
