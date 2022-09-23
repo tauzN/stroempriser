@@ -10,7 +10,7 @@
                     <div class=" rounded-r-full border-r-2 pl-2 flex  justify-between"
                         :style="`border-color: hsl(${barColorHue(item.price)} 60% 40%);
                         width: ${barLength(item.price)}%;
-                        background-color: hsla(${barColorHue(item.price)}, 60%, 40%, .3);
+                        background-color: hsla(${barColorHue(item.price)}, 60%, 40%, 25%);
                         
                         `">
                         <span>
@@ -55,6 +55,10 @@ onMounted(async () => {
 const min = (prices: number[]): number => Math.min(...prices)
 const max = (prices: number[]): number => Math.max(...prices)
 const isSameHour = (datetime: Date): boolean => dayjs().startOf('hour').isSame(dayjs(datetime).startOf('hour'))
+/**
+ * Converts price to a color from green to red i hue degrees
+ * @param price price in DKK/kWh
+ */
 const barColorHue = (price: number): number => (120 - (afgifter + price) / maxPrice.value * 120)
 const barLength = (price: number): number => (afgifter + price) / maxPrice.value * 90
 </script>
