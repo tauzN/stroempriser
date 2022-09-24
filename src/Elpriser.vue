@@ -17,11 +17,11 @@
                             {{(afgifter + item.price).toLocaleString("da-dk",
                             {minimumFractionDigits:2, maximumFractionDigits:2})}}
                         </span>
-                        <span v-if="isSameHour(item.datetime)" class="pr-2">Nu</span>
+                        <span v-if="isSameHourAsNow(item.datetime)" class="pr-2">Nu</span>
                     </div>
                 </div>
                 <div class="absolute h-4 w-full bg-blue-400/30 z-20 animate-pulse"
-                    v-if="isSameHour(item.datetime)"></div>
+                    v-if="isSameHourAsNow(item.datetime)"></div>
                 <div class="absolute h-4 w-full z-20 opacity-20" :style="`background-color: hsl(${barColorHue(item.price)} 60% 40%)`"
                     v-if="item.price === min(last36Hours.map(item => item.price))"></div>
                 <div class="absolute h-4 w-full z-20 opacity-20" :style="`background-color: hsl(${barColorHue(item.price)} 60% 40%)`"
@@ -37,10 +37,7 @@ import { computed, onMounted, ref } from 'vue';
 import { afgifter } from './prices';
 import { record } from './types';
 import { getLastDays } from './util';
-const maxPrice = computed(() => {
-    if (!prices.value) return 10
-    else return Math.max(...prices.value.slice(prices.value.length - 36).map(item => item.price + afgifter))
-})
+const maxPrice = 8
 const last36Hours = computed(() => {
     if (!prices.value) return []
     return prices.value?.slice(prices.value.length - 36)
@@ -48,17 +45,10 @@ const last36Hours = computed(() => {
 const prices = ref<record[]>()
 onMounted(async () => {
     prices.value = await getLastDays(30)
-    setInterval(() => {
-
-    }, 1000)
 })
 const min = (prices: number[]): number => Math.min(...prices)
 const max = (prices: number[]): number => Math.max(...prices)
-const isSameHour = (datetime: Date): boolean => dayjs().startOf('hour').isSame(dayjs(datetime).startOf('hour'))
-/**
- * Converts price to a color from green to red i hue degrees
- * @param price price in DKK/kWh
- */
-const barColorHue = (price: number): number => (120 - (afgifter + price) / maxPrice.value * 120)
-const barLength = (price: number): number => (afgifter + price) / maxPrice.value * 90
+const isSameHourAsNow = (datetime: Date): boolean => dayjs().startOf('hour').isSame(dayjs(datetime).startOf('hour'))
+const barColorHue = (price: number): number => (120 - (afgifter + price) / maxPrice * 120)
+const barLength = (price: number): number => (afgifter + price) / maxPrice * 100
 </script>
