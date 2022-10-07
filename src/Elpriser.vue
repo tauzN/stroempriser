@@ -1,11 +1,12 @@
 <template>
+    <div class="max-w-md mx-auto">
     <div v-show="!records?.length" class="animate-pulse">Henter data...</div>
     <div v-if="records?.length" class="text-xs text-gray-300 font-mono">
         <template v-for="(item, index) in records">
             <div>
-                <div class="absolute w-full h-4" :class="{'bg-gray-900/20': index%2!=0}"></div>
+                <div class="absolute left-0 w-full h-4" :class="{'bg-gray-900/20': index%2!=0}"></div>
                 <div v-if="isSameHourAsNow(item.datetime)"
-                    class="absolute w-full bg-blue-500/80 h-px mt-2 animate-pulse">
+                    class="absolute left-0 w-full bg-blue-500/80 h-px mt-2 animate-pulse">
                 </div>
                 <div class="flex pl-1 uppercase tracking-wide text-[.6rem]" v-if="index === 0">
                     <div>tid</div>
@@ -42,6 +43,7 @@
             </div>
         </template>
     </div>
+</div>
 </template>
 <script setup lang="ts">
 import dayjs from 'dayjs';
