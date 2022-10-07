@@ -1,12 +1,8 @@
 export type record = {
-  /**
-   * 
-   */
   datetime: Date;
-  /**
-   * Floating point in DKK/kWh
-   */
-  price: number;
+  spotPrice: number;
+  afgift: number;
+  totalPrice: number;
 };
 
 export type rawRecord = {

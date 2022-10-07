@@ -5,14 +5,10 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import dayjs from 'dayjs';
 import colors from 'tailwindcss/colors'
 import { ref, onMounted } from 'vue';
-import { afgifter } from './prices';
 import { record } from './types';
-import { avg } from './util'
 Chart.register(annotationPlugin);
 const props = defineProps<{
     records: record[],
-    afgifter: number,
-    avgPrice: number
 }>()
 const chartRef = ref<HTMLCanvasElement>()
 const chart = ref<Chart>()
@@ -35,7 +31,7 @@ const drawChart = () => {
                 },
                 y: {
                     stacked: true,
-                    suggestedMax: 3 + Math.max(...props.records.map(item => item.price))
+                    suggestedMax: 3 + Math.max(...props.records.map(item => item.totalPrice))
                 }
             },
             plugins: {
@@ -47,73 +43,18 @@ const drawChart = () => {
                         currentTime: {
                             type: 'line',
                             borderColor: colors.green[500] + "CC",
-                            // borderDash: [6, 6],
                             borderWidth: 1,
                             xScaleID: 'x',
                             xMin: dayjs().subtract(30, "minutes").valueOf(),
                             xMax: dayjs().subtract(30, "minutes").valueOf(),
                             yMin: 0,
-                            // yMax: Math.max(...props.records().map(item => item.price)) + 30,
-                            yMax: 1000,
                             yScaleID: 'y',
                             label: {
                                 enabled: true,
-                                content: (props.records.find(item => dayjs().isSame(item.datetime, "hour")).price + props.afgifter).toLocaleString("da-dk") + " kr.",
+                                content: (props.records.find(item => dayjs().isSame(item.datetime, "hour"))?.totalPrice).toLocaleString("da-dk") + " kr.",
                                 backgroundColor: colors.green[700] + "CC",
                                 color: colors.neutral[100],
-                                position: "end",
-                                yAdjust: 15
-                            }
-                        },
-                        avgPrice: {
-                            type: 'line',
-                            borderColor: colors.blue[400],
-                            borderDash: [8, 8],
-                            borderWidth: 1,
-                            scaleID: 'y',
-                            value: props.avgPrice,
-                        },
-                        afgifter: {
-                            type: 'line',
-                            borderColor: colors.gray[200],
-                            // borderDash: [8, 8],
-                            borderWidth: 1,
-                            scaleID: 'y',
-                            value: props.afgifter,
-                        },
-                        today: {
-                            type: 'box',
-                            backgroundColor: colors.neutral[200] + "05",
-                            borderWidth: 1,
-                            borderColor: colors.neutral[200] + "55",
-                            xMax: dayjs(props.records[12].datetime).subtract(30, "minutes").valueOf(),
-                            label: {
-                                color: colors.neutral[100],
-
-                                drawTime: 'beforeDraw',
-                                enabled: true,
-                                content: dayjs(props.records[0].datetime).format("dddd"),
-                                position: {
-                                    x: 'center',
-                                    y: 'start'
-                                }
-                            }
-                        },
-                        tomorrow: {
-                            type: 'box',
-                            backgroundColor: colors.neutral[200] + "05",
-                            borderWidth: 1,
-                            borderColor: colors.neutral[200] + "55",
-                            xMin: dayjs(props.records[12].datetime).subtract(30, "minutes").valueOf(),
-                            label: {
-                                color: colors.neutral[100],
-                                drawTime: 'beforeDraw',
-                                enabled: true,
-                                content: dayjs(props.records[props.records.length - 1].datetime).format("dddd"),
-                                position: {
-                                    x: 'center',
-                                    y: 'start'
-                                }
+                                position: "end"
                             }
                         }
                     }
@@ -127,9 +68,9 @@ const drawChart = () => {
                     type: "bar",
                     label: "",
                     borderRadius: 5,
-                    data: props.records.map(item => (item.price + props.afgifter)),
+                    data: props.records.map(item => item.totalPrice),
                     backgroundColor: props.records.map(item => {
-                        return `hsl(${120 - item.price / 6 * 120} 50% 40%)`
+                        return `hsl(${120 - item.totalPrice / 6 * 120} 50% 40%)`
                     })
                 }
             ]

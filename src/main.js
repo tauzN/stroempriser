@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import { createRouter, createWebHistory } from "vue-router";
 import Router from "./Router.vue";
-import App from "./App.vue";
 import Elbil from "./Elbil.vue";
 import Elpriser from "./Elpriser.vue"
 import "./index.css";
@@ -11,7 +10,7 @@ const newrouter = createRouter({
   routes: [
     {
       path: "/",
-      component: App,
+      component: Elpriser,
     },
     {
       path: "/elbil",

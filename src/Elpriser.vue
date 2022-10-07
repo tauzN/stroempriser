@@ -1,31 +1,43 @@
 <template>
-    <div class=" text-xs p-2 font-mono">
-        <div v-show="!prices?.length" class=" animate-pulse">Henter data...</div>
-        <template v-for="item in last36Hours">
-            <div class="w-full flex items-center justify-center">
-                <div class="w-8 flex items-center justify-center z-40">
-                    <div class="">{{dayjs(item.datetime).format("HH")}}</div>
+    <div v-show="!records?.length" class="animate-pulse">Henter data...</div>
+    <div v-if="records?.length" class="text-xs text-gray-300 font-mono">
+        <template v-for="(item, index) in records">
+            <div>
+                <div class="absolute w-full h-4" :class="{'bg-gray-900/20': index%2!=0}"></div>
+                <div v-if="isSameHourAsNow(item.datetime)"
+                    class="absolute w-full bg-blue-500/80 h-px mt-2 animate-pulse">
                 </div>
-                <div class="w-full z-30">
-                    <div class=" rounded-r-full border-r-2 pl-2 flex  justify-between"
-                        :style="`border-color: hsl(${barColorHue(item.price)} 60% 40%);
-                        width: ${barLength(item.price)}%;
-                        background-color: hsla(${barColorHue(item.price)}, 60%, 40%, 25%);
-                        
-                        `">
-                        <span>
-                            {{(afgifter + item.price).toLocaleString("da-dk",
+                <div class="flex pl-1 uppercase tracking-wide text-[.6rem]" v-if="index === 0">
+                    <div>tid</div>
+                    <div class="ml-4">pris</div>
+                    <div class="ml-3" :style="`width: ${barLength(item.afgift)}%`">afgifter</div>
+                    <div class="">spotpris</div>
+                </div>
+                <div v-else-if="dayjs(item.datetime).hour() === 0"
+                    class="pl-1 text-center text-[.6rem] font-semibold uppercase tracking-widest mt-1 border-gray-700">
+                    {{dayjs(item.datetime).format("dddd")}}
+                </div>
+                <div class="w-full flex" :class="{
+                    'bg-green-500/20': item.totalPrice < min(records.map(item => item.totalPrice)) * 1.1,
+                    'bg-red-500/20': item.totalPrice > max(records.map(item => item.totalPrice)) * 0.90
+                }">
+                    <div class="w-full z-30 flex items-center">
+                        <div class="pl-1">{{dayjs(item.datetime).format("HH")}}</div>
+                        <div class="pl-4">
+                            {{(item.totalPrice).toLocaleString("da-dk",
                             {minimumFractionDigits:2, maximumFractionDigits:2})}}
-                        </span>
-                        <span v-if="isSameHourAsNow(item.datetime)" class="pr-2">Nu</span>
+                        </div>
+                        <div class="ml-2 h-3 rounded-l-md" :style="`
+                        background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 35%);
+                        width: ${barLength(item.afgift)}%;
+                        `">
+                        </div>
+                        <div class="h-3 rounded-r-md" :style="`
+                        width: ${barLength(item.spotPrice)}%;
+                        background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 40%);
+                        `">
+                        </div>
                     </div>
-                </div>
-                <div class="absolute h-4 w-full bg-blue-400/30 z-20 animate-pulse"
-                    v-if="isSameHourAsNow(item.datetime)"></div>
-                <div class="absolute h-4 w-full z-20 opacity-20" :style="`background-color: hsl(${barColorHue(item.price)} 60% 40%)`"
-                    v-if="item.price === min(last36Hours.map(item => item.price))"></div>
-                <div class="absolute h-4 w-full z-20 opacity-20" :style="`background-color: hsl(${barColorHue(item.price)} 60% 40%)`"
-                    v-if="item.price === max(last36Hours.map(item => item.price))">
                 </div>
             </div>
         </template>
@@ -33,22 +45,26 @@
 </template>
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import { computed, onMounted, ref } from 'vue';
-import { afgifter } from './prices';
+import * as da from "dayjs/locale/da";
+import { computed, onBeforeMount, ref } from 'vue';
 import { record } from './types';
-import { getLastDays } from './util';
-const maxPrice = 8
-const last36Hours = computed(() => {
-    if (!prices.value) return []
-    return prices.value?.slice(prices.value.length - 36)
+import { getLastHours } from './util';
+dayjs.locale(da)
+const maxPrice = computed(() => {
+    if (records.value) {
+        let temp = max(records.value?.map(item => item.totalPrice))
+        if (temp > 8) return temp+1
+        return 8
+    }
+    return 1
 })
-const prices = ref<record[]>()
-onMounted(async () => {
-    prices.value = await getLastDays(30)
+const records = ref<record[]>()
+onBeforeMount(async () => {
+    records.value = await getLastHours(36)
 })
 const min = (prices: number[]): number => Math.min(...prices)
 const max = (prices: number[]): number => Math.max(...prices)
-const isSameHourAsNow = (datetime: Date): boolean => dayjs().startOf('hour').isSame(dayjs(datetime).startOf('hour'))
-const barColorHue = (price: number): number => (120 - (afgifter + price) / maxPrice * 120)
-const barLength = (price: number): number => (afgifter + price) / maxPrice * 100
+const isSameHourAsNow = (datetime: Date): boolean => dayjs().isSame(dayjs(datetime), "hour")
+const barColorHue = (price: number): number => (170 - price / maxPrice.value * 200)
+const barLength = (price: number): number => (price) / maxPrice.value * 100
 </script>
