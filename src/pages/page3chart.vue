@@ -1,5 +1,5 @@
 <template>
-            <div class="bg-gray-800 px-2 py-4 shadow rounded-xl">
+            <div class="bg-gray-800 px-2 py-4 rounded-xl">
             <div class=" flex justify-evenly font-semibold">
                 <div>Gns. {{_avg}}</div>
                 <div class="text-center font-semibold uppercase tracking-widest">
@@ -10,7 +10,7 @@
             <div class="flex justify-evenly h-40 mt-4">
                 <template v-for="item in records">
                     <div class="h-full w-[2%] flex flex-col">
-                        <div class="text-vertical text-[2vw] mb-1 font-mono flex items-center" :class="{'font-bold': isSameHourAsNow(item.datetime)}">
+                        <div class="text-vertical text-[.5rem] mb-1 font-mono flex items-center" :class="{'font-bold': isSameHourAsNow(item.datetime)}">
                             {{(item.totalPrice).toLocaleString("da-dk", {minimumFractionDigits:2, maximumFractionDigits:2})}}</div>
                         <div class="h-full rounded-full flex flex-col justify-end overflow-hidden"
                             :class="[{'bg-blue-500/40 animate-pulse':isSameHourAsNow(item.datetime)}, barColor(item.totalPrice)]">
@@ -23,7 +23,7 @@
                             background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 35%)
                             `"></div>
                         </div>
-                        <div class="font-mono text-[2vw] flex justify-center">{{dayjs(item.datetime).format("HH")}}</div>
+                        <div class="font-mono text-[.5rem] flex justify-center">{{dayjs(item.datetime).format("HH")}}</div>
                     </div>
                 </template>
             </div>

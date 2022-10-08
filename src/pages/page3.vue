@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-900 min-h-screen text-gray-100 text-xs flex flex-col space-y-2 p-2">
+    <div class="text-gray-100 text-xs flex flex-col gap-2 p-2 max-w-md mx-auto">
         <Page3chart v-if="records" :records="records.slice(0,24)"></Page3chart>
         <Page3chart v-if="records" :records="records.slice(25)"></Page3chart>
     </div>
