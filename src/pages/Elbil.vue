@@ -107,7 +107,7 @@ onBeforeMount(() => {
 </template>
 <style scoped>
 section {
-    @apply bg-gray-900 rounded py-4 m-2 w-80;
+    @apply bg-gray-800 rounded py-4 m-2 w-80;
 }
 
 section h2 {
