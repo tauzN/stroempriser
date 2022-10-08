@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Router from "./Router.vue";
 import Elbil from "./Elbil.vue";
 import Elpriser from "./Elpriser.vue"
+import page3 from "./pages/page3.vue"
 import "./index.css";
 
 const newrouter = createRouter({
@@ -19,6 +20,10 @@ const newrouter = createRouter({
     {
       path: "/elpriser",
       component: Elpriser
+    },
+    {
+      path: "/3",
+      component: page3
     }
   ],
 });
