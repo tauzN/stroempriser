@@ -13,7 +13,7 @@
                         kr.
                     </div>
                     <div class="text-[.5rem] text-gray-400">
-                        Billigste
+                        Billigst
                     </div>
                 </div>
             </div>
