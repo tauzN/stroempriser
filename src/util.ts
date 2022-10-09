@@ -2,6 +2,9 @@ import { rawRecord, record } from "./types";
 import dayjs from "dayjs";
 import { afgift } from "./prices";
 
+export const isCurrentHour = (datetime: Date): boolean => dayjs().isSame(dayjs(datetime), "hour")
+
+
 export const avg = (array: number[]): number =>
   array.reduce(
     (previousValue, currentValue) =>
