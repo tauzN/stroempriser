@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-gray-800 px-2 py-4 rounded-xl flex flex-col w-full max-w-lg ">
+    <div class="bg-gray-900 border border-gray-700 px-2 pt-4 pb-3 rounded-xl flex flex-col w-[600px] ">
         <div class="flex justify-around items-center font-semibold">
             <div class="text-center text-base font-semibold uppercase ">
                 {{dayjs(records[0].datetime).format("dddd")}}
@@ -39,9 +39,9 @@
 
         </div>
         <div class="flex justify-evenly h-40 mt-4">
-            <template v-for="item in records">
+            <template v-for="(item, index) in records">
                 <div class="h-full w-[2%] flex flex-col">
-                    <div class="text-vertical text-[.5rem] mb-1 font-mono flex items-center"
+                    <div class="text-vertical text-[.5rem] mb-2 font-mono flex items-center"
                         :class="{'font-bold': isCurrentHour(item.datetime)}">
                         {{(item.totalPrice).toLocaleString("da-dk", {minimumFractionDigits:2,
                         maximumFractionDigits:2})}}</div>
@@ -52,10 +52,11 @@
                         `"></div>
                         <div class="rounded-b-md" :style="`
                         height: ${barHeight(item.afgift)}%;
-                        background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 35%)
+                        background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 30%)
                         `"></div>
                     </div>
-                    <div class="font-mono text-[.5rem] flex justify-center">{{dayjs(item.datetime).format("HH")}}</div>
+                    <div class="mt-2 font-mono text-[.5rem] flex justify-center">
+                        {{dayjs(item.datetime).format("HH")}}</div>
                 </div>
             </template>
         </div>
@@ -79,15 +80,16 @@ const maxPrice = computed(() => {
     if (props.records) {
         max = Math.max(...props.records.map(item => item.totalPrice))
     }
+    return max
     if (max < 8) return 8
     else return max
 })
-const barColorHue = (price: number): number => (170 - price / maxPrice.value * 200)
+const barColorHue = (price: number): number => (150 - price / maxPrice.value * 100)
 const barHeight = (price: number): number => price / maxPrice.value * 100
 const barColor = (record: record) => {
-    if (isCurrentHour(record.datetime)) return "bg-blue-500/40 animate-pulse"
-    if (record.totalPrice < Math.min(...props.records.map(item => item.totalPrice)) * 1.01) return "bg-green-500/20"
-    if (record.totalPrice > Math.max(...props.records.map(item => item.totalPrice)) * .99) return "bg-red-500/20"
+    if (isCurrentHour(record.datetime)) return "bg-blue-500/80 animate-pulse"
+    if (record.totalPrice < Math.min(...props.records.map(item => item.totalPrice)) * 1.01) return "bg-green-500/40"
+    if (record.totalPrice > Math.max(...props.records.map(item => item.totalPrice)) * .99) return "bg-red-500/40"
     else return "bg-gray-700"
 }
 </script>
