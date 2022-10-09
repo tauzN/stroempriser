@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-gray-900 border border-gray-700 px-2 pt-4 pb-3 rounded-xl flex flex-col w-[600px] ">
-        <div class="flex justify-around items-center font-semibold">
+    <div class="bg-gray-900 border border-gray-700 px-2 pt-4 pb-3 rounded-xl flex flex-col w-full max-w-xl">
+        <div class="px-2 flex justify-between items-center font-semibold">
             <div class="text-center text-base font-semibold uppercase ">
                 {{dayjs(records[0].datetime).format("dddd")}}
             </div>
