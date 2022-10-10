@@ -80,11 +80,10 @@ const maxPrice = computed(() => {
     if (props.records) {
         max = Math.max(...props.records.map(item => item.totalPrice))
     }
-    return max
     if (max < 8) return 8
     else return max
 })
-const barColorHue = (price: number): number => (150 - price / maxPrice.value * 100)
+const barColorHue = (price: number): number => price > 6 ? 0 : (160 - price / 4 * 100)
 const barHeight = (price: number): number => price / maxPrice.value * 100
 const barColor = (record: record) => {
     if (isCurrentHour(record.datetime)) return "bg-blue-500/80 animate-pulse"
