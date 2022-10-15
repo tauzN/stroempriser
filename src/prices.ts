@@ -10,7 +10,7 @@ const systemtarif = .061
 const balancetarif = .00229
 const forbrugstariffer = transmissionsnettarif + systemtarif + balancetarif
 // årsforbrug i kWh
-const aarsforbrug = 3_000; // kWh
+const aarsforbrug = 1_500; // kWh
 // Netabonnement (net) 290 kr. pr. år
 const netabonnement: number = 290 / aarsforbrug; // DDK * øre/DKK /
 const flat_fee = elafgift + forbrugstariffer + netabonnement

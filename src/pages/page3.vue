@@ -4,7 +4,7 @@
         </Page3chart>
         <Page3chart v-if="records" :records="records.slice(24)"></Page3chart>
     </div>
-    <div class=" max-w-xs text-gray-400 text-xs mx-auto text-center">Priserne er baseret på et årsforbrug på 3.000 kWh for
+    <div class=" max-w-sm text-gray-400 text-xs mx-auto text-center">Spidslast mellem kl. 17-20. Priser er baseret på et årsforbrug på 1.500 kWh for
         kunder i DK1 i N1 A/S netområder. Priser er inkl. elafgift, transmissionsnettarif, systemtarif, balancetarif og netabonnement. Priser er ekskl. abbonement  til elselskab og spottillæg.</div>
 </template>
 <script setup lang="ts">
