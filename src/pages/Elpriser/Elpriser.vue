@@ -9,12 +9,12 @@
 </template>
 <script setup lang="ts">
 import dayjs from "dayjs";
-import { onBeforeMount, ref } from "vue"
-import { record } from "../types";
-import { getLastHours } from "../util";
-import Page3chart from "./page3chart.vue";
+import { onMounted, ref } from "vue"
+import { record } from "../../types";
+import { getLastHours } from "../../util/util";
+import Page3chart from "./Chart.vue";
 const records = ref<record[]>()
-onBeforeMount(async () => {
+onMounted(async () => {
     records.value = await getLastHours(48)
 })
 </script>

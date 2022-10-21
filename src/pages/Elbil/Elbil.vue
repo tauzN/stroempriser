@@ -8,19 +8,19 @@ const hoursToCharge = computed<number>(() => {
     return ((wantedBattery.value - stateOfCharge.value) * (batterySize.value / 100) / (power.value / 1000))
 })
 watch(batterySize, value => {
-    console.log(value);
+    // console.log(value);
     localStorage.setItem("batterySize", value.toString())
 })
 watch(power, value => {
-    console.log(value);
+    // console.log(value);
     localStorage.setItem("power", value.toString())
 })
 watch(stateOfCharge, value => {
-    console.log(value);
+    // console.log(value);
     localStorage.setItem("stateOfCharge", value.toString())
 })
 watch(wantedBattery, value => {
-    console.log(value);
+    // console.log(value);
     localStorage.setItem("wantedBattery", value.toString())
 })
 onBeforeMount(() => {

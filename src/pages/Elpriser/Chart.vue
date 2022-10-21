@@ -65,8 +65,8 @@
 <script setup lang="ts">
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/vue/20/solid"
 import { computed } from 'vue';
-import { record } from '../types';
-import { avg, isCurrentHour } from '../util'
+import { record } from '../../types';
+import { avg, isCurrentHour } from '../../util/util'
 import dayjs from "dayjs";
 import da from "dayjs/locale/da";
 dayjs.locale(da)

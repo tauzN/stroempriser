@@ -4,7 +4,7 @@ import fs from 'fs'
 
 // https://vitejs.dev/config/
 export default ({ mode }) => {
-  console.log(process.env);
+  //console.log(process.env);
   process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
   return defineConfig({
     plugins: [vue()],
