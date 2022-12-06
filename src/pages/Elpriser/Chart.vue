@@ -72,19 +72,12 @@ import da from "dayjs/locale/da";
 dayjs.locale(da)
 
 const props = defineProps<{
-    records: record[]
+    records: record[],
+    maxPrice: number
 }>()
 const _avg = avg(props.records.map(item => item.totalPrice)).toLocaleString("da-dk", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-const maxPrice = computed(() => {
-    let max = 0;
-    if (props.records) {
-        max = Math.max(...props.records.map(item => item.totalPrice))
-    }
-    if (max < 8) return 8
-    else return max
-})
 const barColorHue = (price: number): number => price > 6 ? 0 : (160 - price / 4 * 100)
-const barHeight = (price: number): number => price / maxPrice.value * 100
+const barHeight = (price: number): number => price / props.maxPrice * 100
 const barColor = (record: record) => {
     if (isCurrentHour(record.datetime)) return "bg-blue-500/80 animate-pulse"
     if (record.totalPrice < Math.min(...props.records.map(item => item.totalPrice)) * 1.01) return "bg-green-500/40"
