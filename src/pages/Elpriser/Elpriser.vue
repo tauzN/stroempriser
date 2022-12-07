@@ -4,14 +4,15 @@
         </Page3chart>
         <Page3chart v-if="records" :records="records.slice(24)" :maxPrice="maxPrice"></Page3chart>
     </div>
-    <div class=" max-w-xs text-gray-400 text-xs mx-auto text-center">Spidslast mellem kl. 17-20. Priser er baseret på et årsforbrug på 1.500 kWh for
-        kunder vest for storebælt i N1 A/S netområder. Priser er inkl. elafgift, transmissionsnettarif, systemtarif, balancetarif, nettarif og netabonnement. Priser er ekskl. abbonement  til elselskab og spottillæg.</div>
+    <div class=" max-w-xs text-gray-400 text-xs mx-auto text-center">
+        Priser er ekskl. abbonement  til elselskab og spottillæg. Der er ingen nettarif eller netabonnement hos N1 i december <a target="_blank" class=" text-blue-500 hover:underline" href="https://via.ritzau.dk/pressemeddelelse/750000-jyske-elkunder-slipper-for-nettarif-i-december?publisherId=13559703&releaseId=13663280&lang=da">læs mere</a>
+
+    </div>
 </template>
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { computed, onMounted, ref } from "vue"
 import { record } from "../../types";
-import { afgifter_lavlast, afgifter_spidslast } from "../../util/prices";
 import { getLastHours } from "../../util/util";
 import Page3chart from "./Chart.vue";
 const records = ref<record[]>()
