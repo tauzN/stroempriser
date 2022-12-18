@@ -36,8 +36,7 @@ const maxPrice = computed(() => {
     if (records && records.value) {
         max = Math.max(...records.value.map(item => item.totalPrice))
     }
-    if (max < 8) return 8
-    else return max
+    return (max < 3) ? 3.5 : max+.5
 })
 </script>
 
