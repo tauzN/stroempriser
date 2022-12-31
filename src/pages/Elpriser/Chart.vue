@@ -2,14 +2,17 @@
     <div class="bg-gray-900 border border-gray-700 px-2 pt-4 pb-3 rounded-xl flex flex-col w-full max-w-xl">
         <div class="px-3 flex justify-between items-center font-semibold">
             <div class="text-center text-base font-semibold uppercase ">
-                {{dayjs(records[0].datetime).format("dddd")}}
+                {{ dayjs(records[0].datetime).format("dddd") }}
             </div>
             <div class="flex gap-1 justify-center items-center leading-tight">
                 <ArrowDownIcon class="w-4 text-green-500"></ArrowDownIcon>
                 <div class="flex flex-col justify-center">
                     <div class="">
-                        {{Math.min(...records.map(item =>
-                        item.totalPrice)).toLocaleString("da-dk",{minimumFractionDigits:2, maximumFractionDigits:2})}}
+                        {{ Math.min(...records.map(item =>
+        item.totalPrice)).toLocaleString("da-dk", {
+            minimumFractionDigits: 2, maximumFractionDigits: 2
+        })
+}}
                         kr.
                     </div>
                     <div class="text-[.5rem] text-gray-400">
@@ -19,7 +22,7 @@
             </div>
             <div class="flex flex-col justify-center  leading-tight">
                 <div>
-                    {{_avg}} kr.
+                    {{ _avg }} kr.
                 </div>
                 <div class="text-[.5rem] text-gray-400">Gennemsnit</div>
             </div>
@@ -27,8 +30,11 @@
                 <ArrowUpIcon class="w-4 text-red-500"></ArrowUpIcon>
                 <div class="flex flex-col justify-center">
                     <div class="">
-                        {{Math.max(...records.map(item =>
-                        item.totalPrice)).toLocaleString("da-dk",{minimumFractionDigits:2, maximumFractionDigits:2})}}
+                        {{ Math.max(...records.map(item =>
+        item.totalPrice)).toLocaleString("da-dk", {
+            minimumFractionDigits: 2, maximumFractionDigits: 2
+        })
+}}
                         kr.
                     </div>
                     <div class="text-[.5rem] text-gray-400">
@@ -42,9 +48,12 @@
             <template v-for="(item, index) in records">
                 <div class="h-full w-[2%] flex flex-col">
                     <div class="text-vertical text-[.5rem] mb-2 font-mono flex items-center"
-                        :class="{'font-bold': isCurrentHour(item.datetime)}">
-                        {{(item.totalPrice).toLocaleString("da-dk", {minimumFractionDigits:2,
-                        maximumFractionDigits:2})}}</div>
+                        :class="{ 'font-bold': isCurrentHour(item.datetime) }">
+                        {{ (item.totalPrice).toLocaleString("da-dk", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })
+}}</div>
                     <div class="h-full rounded-full flex flex-col justify-end overflow-hidden" :class="barColor(item)">
                         <div class="rounded-t-full" :style="`
                         height: ${barHeight(item.spotPrice)}%;
@@ -56,7 +65,7 @@
                         `"></div>
                     </div>
                     <div class="mt-2 font-mono text-[.5rem] flex justify-center">
-                        {{dayjs(item.datetime).format("HH")}}</div>
+                        {{ dayjs(item.datetime).format("HH") }}</div>
                 </div>
             </template>
         </div>
@@ -64,7 +73,6 @@
 </template>
 <script setup lang="ts">
 import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/vue/20/solid"
-import { computed } from 'vue';
 import { record } from '../../types';
 import { avg, isCurrentHour } from '../../util/util'
 import dayjs from "dayjs";

@@ -17,11 +17,11 @@ const lavlast: number = 0//(.4077 - .0202); // DKK
 const spidslast: number = 0//(1.10159 - .0425); // DKK
 const maanederMedSpidslast = [0, 1, 2, 9, 10, 11]
 const timerMedSpidslast = [17, 18, 19]
-export const afgift = (date: Date): number => {
+export const afgiftFromDate = (date: Date): number => {  
   if (maanederMedSpidslast.includes(dayjs(date).month()) && timerMedSpidslast.includes(dayjs(date).hour()))
-    return ((flat_fee + spidslast) * 1.25)
+    return flat_fee + spidslast
   else
-    return ((flat_fee + lavlast) * 1.25)
+    return flat_fee + lavlast
 }
-export const afgifter_lavlast = () => (flat_fee + lavlast) * 1.25
-export const afgifter_spidslast = () => (flat_fee + spidslast) * 1.25
+export const afgifter_lavlast = flat_fee + lavlast
+export const afgifter_spidslast = flat_fee + spidslast

@@ -1,6 +1,6 @@
 import { rawRecord, record } from "../types";
 import dayjs from "dayjs";
-import { afgift } from "./prices";
+import { afgiftFromDate } from "./prices";
 
 export const isCurrentHour = (datetime: Date): boolean => dayjs().isSame(dayjs(datetime), "hour")
 
@@ -14,7 +14,7 @@ export const avg = (array: number[]): number =>
 /**
  * Converts DKK/MWh to DKK/Kwh
  * @param DKKMWh - Price in DKK/MWh
- * @returns price in Øre/KWh
+ * @returns price in DKK/KWh
  */
 const DKKMWh_to_DKKkWh = (DKK: number) => DKK / 1_000;
 
@@ -36,15 +36,15 @@ export const getLastHours = async (hours: number): Promise<record[]> =>
         "https://api.energidataservice.dk/dataset/Elspotprices?" + params)
       const json = await raw.json() as { records: rawRecord[] }
       //console.log(json);
-      let prices: record[] = json.records.map((item) => {
+      const prices: record[] = json.records.map((item) => {
         // SpotPriceDKK er null i weekenden og omregnes derfor fra SpotPriceEUR
-        let s = DKKMWh_to_DKKkWh(item.SpotPriceDKK || (item.SpotPriceEUR * 7.44)) * 1.25
-        let a = afgift(dayjs(item.HourDK).toDate())
+        const spotPrice = DKKMWh_to_DKKkWh(item.SpotPriceDKK || item.SpotPriceEUR * 7.44)
+        const afgift = afgiftFromDate(dayjs(item.HourDK).toDate())
         return {
-          spotPrice: s,
+          spotPrice,
           datetime: dayjs(item.HourDK).toDate(),
-          afgift: a,
-          totalPrice: s + a
+          afgift,
+          totalPrice: (spotPrice + afgift) * 1.25
         };
       });
       resolve(prices.reverse());
@@ -52,6 +52,4 @@ export const getLastHours = async (hours: number): Promise<record[]> =>
       console.log(error);
       reject(error)
     }
-
-
   });
