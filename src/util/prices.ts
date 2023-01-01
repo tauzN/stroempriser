@@ -7,10 +7,7 @@ const transmissionsnettarif = .058
 const systemtarif = .054
 const balancetarif = 0
 const forbrugstariffer = transmissionsnettarif + systemtarif + balancetarif
-const aarsforbrug = 3000; // årsforbrug i kWh
-// Netabonnement (net) 290 kr. pr. år
-const netabonnement: number = 0 // 290 / aarsforbrug; // DDK * øre/DKK /
-const flat_fee = elafgift + forbrugstariffer + netabonnement
+const flat_fee = elafgift + forbrugstariffer
 
 // Nettarif https://n1.dk/priser-og-vilkaar
 const lavlast: number = 0.432225//(.4077 - .0202); // DKK
