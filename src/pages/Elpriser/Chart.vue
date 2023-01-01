@@ -84,7 +84,7 @@ const props = defineProps<{
     maxPrice: number
 }>()
 const _avg = avg(props.records.map(item => item.totalPrice)).toLocaleString("da-dk", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-const barColorHue = (price: number): number => price > 6 ? 0 : (160 - price / 4 * 100)
+const barColorHue = (price: number): number => price > 5 ? 0 : (150 - (price * 100)/5)
 const barHeight = (price: number): number => price / props.maxPrice * 100
 const barColor = (record: record) => {
     if (isCurrentHour(record.datetime)) return "bg-blue-500/80 animate-pulse"
