@@ -9,10 +9,11 @@
         <Page3chart v-if="records" :records="records.slice(24)" :maxPrice="maxPrice"></Page3chart>
     </div>
     <div class=" max-w-xs text-gray-400 text-xs mx-auto text-center">
-        Aktuelle priser findes på:
+        Priserne er inklusiv
         <a target="_blank" class=" text-blue-500 hover:underline" href="https://n1.dk/priser-og-vilkaar">Nettarif hos N1 A/S</a>, 
         <a target="_blank" class=" text-blue-500 hover:underline" href="https://energinet.dk/El/Elmarkedet/Tariffer/Aktuelle-tariffer/">Forbrugstariffer</a> og 
-        <a target="_blank" class=" text-blue-500 hover:underline" href="https://www.skm.dk/skattetal/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven/">Elafgift</a>. Priser er ekskl. abbonement til elselskab og spottillæg
+        <a target="_blank" class=" text-blue-500 hover:underline" href="https://www.skm.dk/skattetal/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven/">Elafgift</a>.
+        Priser er eksklusiv evt. abbonement til elselskab og spottillæg.
 
     </div>
 </template>
