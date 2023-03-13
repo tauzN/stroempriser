@@ -1,6 +1,6 @@
 <template>
-    <div class="text-gray-100 text-xs flex p-2 gap-2 justify-center flex-wrap lg:flex-nowrap mx-auto">
-        <div class="animate-pulse text-lg" v-show="records === undefined">
+    <div class="flex flex-wrap justify-center gap-2 p-2 mx-auto text-xs text-gray-100 lg:flex-nowrap">
+        <div class="text-lg animate-pulse" v-show="records === undefined">
             Henter priser...
         </div>
         <Page3chart v-if="records && dayjs(records[0].datetime).isSame(dayjs(), 'day')" :records="records.slice(0, 24)"
@@ -8,11 +8,11 @@
         </Page3chart>
         <Page3chart v-if="records" :records="records.slice(24)" :maxPrice="maxPrice"></Page3chart>
     </div>
-    <div class=" max-w-xs text-gray-400 text-xs mx-auto text-center">
+    <div class="max-w-xs mx-auto text-xs text-center text-gray-400 ">
         Priser er inklusive
-        <a target="_blank" class=" text-blue-500 hover:underline" href="https://n1.dk/priser-og-vilkaar">nettariffer</a> (N1 A/S), 
-        <a target="_blank" class=" text-blue-500 hover:underline" href="https://energinet.dk/El/Elmarkedet/Tariffer/Aktuelle-tariffer/">forbrugstariffer</a> (Energinet),
-        <a target="_blank" class=" text-blue-500 hover:underline" href="https://www.skm.dk/skattetal/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven/">elafgift</a> og 25% moms.
+        <a target="_blank" class="text-blue-500  hover:underline" href="https://n1.dk/priser-og-vilkaar">nettariffer</a> (N1 A/S), 
+        <a target="_blank" class="text-blue-500  hover:underline" href="https://energinet.dk/El/Elmarkedet/Tariffer/Aktuelle-tariffer/">forbrugstariffer</a> (Energinet),
+        <a target="_blank" class="text-blue-500  hover:underline" href="https://www.skm.dk/skattetal/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven/">elafgift</a> og 25% moms.
     </div>
 </template>
 <script setup lang="ts">
