@@ -1,10 +1,10 @@
 <template>
-    <div class="bg-gray-900 border border-gray-700 px-2 pt-4 pb-3 rounded-xl flex flex-col w-full max-w-xl">
-        <div class="px-3 flex justify-between items-center font-semibold">
-            <div class="text-center text-base font-semibold uppercase ">
+    <div class="flex flex-col w-full max-w-xl px-2 pt-4 pb-3 bg-gray-900 border border-gray-700 rounded-xl">
+        <div class="flex items-center justify-between px-3 font-semibold">
+            <div class="text-base font-semibold text-center uppercase ">
                 {{ dayjs(records[0].datetime).format("dddd") }}
             </div>
-            <div class="flex gap-1 justify-center items-center leading-tight">
+            <div class="flex items-center justify-center gap-1 leading-tight">
                 <ArrowDownIcon class="w-4 text-green-500"></ArrowDownIcon>
                 <div class="flex flex-col justify-center">
                     <div class="">
@@ -20,13 +20,13 @@
                     </div>
                 </div>
             </div>
-            <div class="flex flex-col justify-center  leading-tight">
+            <div class="flex flex-col justify-center leading-tight">
                 <div>
                     {{ _avg }} kr.
                 </div>
                 <div class="text-[.5rem] text-gray-400">Gennemsnit</div>
             </div>
-            <div class="flex gap-1 justify-center items-center leading-tight">
+            <div class="flex items-center justify-center gap-1 leading-tight">
                 <ArrowUpIcon class="w-4 text-red-500"></ArrowUpIcon>
                 <div class="flex flex-col justify-center">
                     <div class="">
@@ -44,7 +44,7 @@
             </div>
 
         </div>
-        <div class="flex justify-evenly h-40 mt-4">
+        <div class="flex h-40 mt-4 justify-evenly">
             <template v-for="(item, index) in records">
                 <div class="h-full w-[2%] flex flex-col">
                     <div class="text-vertical text-[.5rem] mb-2 font-mono flex items-center"
@@ -54,7 +54,7 @@
         maximumFractionDigits: 2
     })
 }}</div>
-                    <div class="h-full rounded-full flex flex-col justify-end overflow-hidden" :class="barColor(item)">
+                    <div class="flex flex-col justify-end h-full overflow-hidden rounded-full" :class="barColor(item)">
                         <div class="rounded-t-full" :style="`
                         height: ${barHeight(item.spotPrice)}%;
                         background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 40%)
@@ -84,7 +84,7 @@ const props = defineProps<{
     maxPrice: number
 }>()
 const _avg = avg(props.records.map(item => item.totalPrice)).toLocaleString("da-dk", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-const barColorHue = (price: number): number => price > 5 ? 0 : (140 - (price * 100) / 4)
+const barColorHue = (price: number): number => price > 4 ? 0 : (140 - (price * 100) / 4)
 const barHeight = (price: number): number => price / props.maxPrice * 100
 const barColor = (record: record) => {
     if (isCurrentHour(record.datetime)) return "bg-blue-500/80 animate-pulse"
