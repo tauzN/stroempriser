@@ -4,7 +4,12 @@
         <section>
             <label class="flex flex-col gap-2">
                 <div>{{ batterySize }} kWh</div>
-                <input type="range" max="100" v-model.number="batterySize">
+                <div class="flex w-full gap-x-2 ">
+                    <button class="w-8 h-8 border border-gray-700 rounded-lg" @click="batterySize--">-</button>
+                    <input class="w-full " type="range" max="100" v-model.number="batterySize">
+                    <button class="w-8 h-8 border border-gray-700 rounded-lg " @click="batterySize++">+</button>
+                </div>
+
                 <div class="text-xs ">Capacity</div>
             </label>
         </section>
@@ -12,7 +17,11 @@
         <section>
             <label class="flex flex-col gap-2 ">
                 <div>{{ stateOfCharge }} %</div>
-                <input type="range" name="" id="" max="100" v-model.number="stateOfCharge">
+                <div class="flex w-full gap-x-2 ">
+                    <button class="w-8 h-8 border border-gray-700 rounded-lg" @click="stateOfCharge--">-</button>
+                    <input class="w-full " type="range" name="" id="" max="100" v-model.number="stateOfCharge">
+                    <button class="w-8 h-8 border border-gray-700 rounded-lg " @click="stateOfCharge++">+</button>
+                </div>
                 <div class="text-xs ">State of Charge</div>
             </label>
         </section>
@@ -41,7 +50,12 @@
         <section>
             <label class="flex flex-col gap-2">
                 <div>{{ wantedBattery }} %</div>
-                <input type="range" v-model="wantedBattery" max="100">
+                <div class="flex w-full gap-x-2 ">
+                    <button class="w-8 h-8 border border-gray-700 rounded-lg" @click="wantedBattery--">-</button>
+
+                    <input class="w-full " type="range" v-model="wantedBattery" max="100">
+                    <button class="w-8 h-8 border border-gray-700 rounded-lg " @click="wantedBattery++">+</button>
+                </div>
                 <div class="text-xs ">Limit</div>
             </label>
         </section>
@@ -98,7 +112,8 @@ select {
 input[type="radio"]:checked~div {
     @apply bg-gray-900 border border-gray-700 rounded
 }
-section{
+
+section {
     @apply bg-gray-800 p-4 rounded
 }
 </style>
