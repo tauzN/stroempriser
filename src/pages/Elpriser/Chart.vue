@@ -9,10 +9,10 @@
                 <div class="flex flex-col justify-center">
                     <div class="">
                         {{ Math.min(...records.map(item =>
-        item.totalPrice)).toLocaleString("da-dk", {
-            minimumFractionDigits: 2, maximumFractionDigits: 2
-        })
-}}
+                            item.totalPrice)).toLocaleString("da-dk", {
+                                minimumFractionDigits: 2, maximumFractionDigits: 2
+                            })
+                        }}
                         kr.
                     </div>
                     <div class="text-[.5rem] text-gray-400">
@@ -31,10 +31,10 @@
                 <div class="flex flex-col justify-center">
                     <div class="">
                         {{ Math.max(...records.map(item =>
-        item.totalPrice)).toLocaleString("da-dk", {
-            minimumFractionDigits: 2, maximumFractionDigits: 2
-        })
-}}
+                            item.totalPrice)).toLocaleString("da-dk", {
+                                minimumFractionDigits: 2, maximumFractionDigits: 2
+                            })
+                        }}
                         kr.
                     </div>
                     <div class="text-[.5rem] text-gray-400">
@@ -50,18 +50,19 @@
                     <div class="text-vertical text-[.5rem] mb-2 font-mono flex items-center"
                         :class="{ 'font-bold': isCurrentHour(item.datetime) }">
                         {{ (item.totalPrice).toLocaleString("da-dk", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    })
-}}</div>
-                    <div class="flex flex-col justify-end h-full overflow-hidden rounded-full" :class="barColor(item)">
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        })
+                        }}</div>
+                    <div class="flex flex-col justify-end h-full overflow-hidden bg-gray-700 rounded-full"
+                        :class="{ 'border-2 border-blue-600': isCurrentHour(item.datetime) }">
                         <div class="rounded-t-full" :style="`
                         height: ${barHeight(item.spotPrice)}%;
-                        background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 40%)
+                                                background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 40%)
                         `"></div>
                         <div class="rounded-b-md" :style="`
                         height: ${barHeight(item.afgift)}%;
-                        background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 30%)
+                                                background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 30%)
                         `"></div>
                     </div>
                     <div class="mt-2 font-mono text-[.5rem] flex justify-center">
@@ -86,13 +87,6 @@ const props = defineProps<{
 const _avg = avg(props.records.map(item => item.totalPrice)).toLocaleString("da-dk", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 const barColorHue = (price: number): number => price > props.maxPrice ? 0 : (140 - (price * 100) / props.maxPrice)
 const barHeight = (price: number): number => price / props.maxPrice * 100
-const barColor = (record: record) => {
-    if (isCurrentHour(record.datetime)) return "bg-blue-500/30 animate-pulse"
-    else if (record.totalPrice < 0) return "bg-green-600/40"
-    else if (record.totalPrice < Math.min(...props.records.map(item => item.totalPrice)) * 1.01) return "bg-green-600/40"
-    else if (record.totalPrice > Math.max(...props.records.map(item => item.totalPrice)) * .99) return "bg-red-600/40"
-    else return "bg-gray-700"
-}
 </script>
 
 <style scoped>
