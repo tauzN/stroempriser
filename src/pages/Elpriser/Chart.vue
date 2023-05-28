@@ -55,7 +55,7 @@
                         })
                         }}</div>
                     <div class="flex flex-col justify-end h-full overflow-hidden bg-gray-700 rounded-full"
-                        :class="{ 'border-2 border-blue-600': isCurrentHour(item.datetime) }">
+                        :class="{ 'border border-blue-600': isCurrentHour(item.datetime) }">
                         <div class="rounded-t-full" :style="`
                         height: ${barHeight(item.spotPrice)}%;
                                                 background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 40%)
