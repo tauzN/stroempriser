@@ -41,9 +41,9 @@ export const getLastHours = async (hours: number): Promise<record[]> =>
         const spotPrice = DKKMWh_to_DKKkWh(item.SpotPriceDKK || item.SpotPriceEUR * 7.44)
         const afgift = afgiftFromDate(dayjs(item.HourDK).toDate())
         return {
-          spotPrice,
+          spotPrice: spotPrice * 1.25,
           datetime: dayjs(item.HourDK).toDate(),
-          afgift,
+          afgift: (spotPrice > 0) ? afgift : afgift + spotPrice * 1.25,
           totalPrice: (spotPrice + afgift) * 1.25
         };
       });

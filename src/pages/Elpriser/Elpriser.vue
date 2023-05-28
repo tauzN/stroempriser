@@ -10,9 +10,13 @@
     </div>
     <div class="max-w-xs mx-auto text-xs text-center text-gray-400 ">
         Priser er inklusive
-        <a target="_blank" class="text-blue-500 hover:underline" href="https://n1.dk/priser-og-vilkaar">nettariffer</a> (N1 A/S), 
-        <a target="_blank" class="text-blue-500 hover:underline" href="https://energinet.dk/El/Elmarkedet/Tariffer/Aktuelle-tariffer/">forbrugstariffer</a> (Energinet),
-        <a target="_blank" class="text-blue-500 hover:underline" href="https://www.skm.dk/skattetal/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven/">elafgift</a> og 25% moms.
+        <a target="_blank" class="text-blue-500 hover:underline" href="https://n1.dk/priser-og-vilkaar">nettariffer</a> (N1
+        A/S),
+        <a target="_blank" class="text-blue-500 hover:underline"
+            href="https://energinet.dk/El/Elmarkedet/Tariffer/Aktuelle-tariffer/">forbrugstariffer</a> (Energinet),
+        <a target="_blank" class="text-blue-500 hover:underline"
+            href="https://www.skm.dk/skattetal/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven/">elafgift</a>
+        og 25% moms.
     </div>
 </template>
 <script setup lang="ts">
@@ -35,7 +39,7 @@ const maxPrice = computed(() => {
     if (records && records.value) {
         max = Math.max(...records.value.map(item => item.totalPrice))
     }
-    return (max < 3) ? 2.5 : max + .5
+    return max + 0.5
 })
 </script>
 
