@@ -10,7 +10,7 @@
     </div>
     <div class="max-w-xs mx-auto text-xs text-center text-gray-400 ">
         Priser er inklusive
-        <a target="_blank" class="text-blue-500 hover:underline" href="https://n1.dk/priser-og-vilkaar">nettariffer</a> (N1
+        <a target="_blank" class="text-blue-500 hover:underline" href="https://n1.dk/priser-og-vilkaar">nettariffer og netabonnement</a> (N1
         A/S),
         <a target="_blank" class="text-blue-500 hover:underline"
             href="https://energinet.dk/El/Elmarkedet/Tariffer/Aktuelle-tariffer/">forbrugstariffer</a> (Energinet),
