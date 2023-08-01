@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
 
 // Elafgift https://www.skm.dk/skattetal/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven/
-const elafgift: number = .697; // DKK
+export const elafgift: number = .697; // DKK
 // Forbrugstariffer https://energinet.dk/El/Elmarkedet/Tariffer/Aktuelle-tariffer
 const transmissionsnettarif = .058
 const systemtarif = .054
 const balancetarif = 0
-const forbrugstariffer = transmissionsnettarif + systemtarif + balancetarif
+export const forbrugstariffer = transmissionsnettarif + systemtarif + balancetarif
 const flat_fee = elafgift + forbrugstariffer
 
 // Nettarif https://n1.dk/priser-og-vilkaar
