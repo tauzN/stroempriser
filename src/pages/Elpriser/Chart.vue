@@ -85,7 +85,7 @@ const props = defineProps<{
     maxPrice: number
 }>()
 const _avg = avg(props.records.map(item => item.totalPrice)).toLocaleString("da-dk", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-const barColorHue = (price: number): number => price > props.maxPrice ? 0 : (140 - (price * 100) / props.maxPrice)
+const barColorHue = (price: number): number => price > props.maxPrice ? 0 : (140 - (price * 150) / props.maxPrice)
 const barHeight = (price: number): number => price / props.maxPrice * 100
 </script>
 
