@@ -58,11 +58,11 @@
                         :class="{ 'border border-blue-600': isCurrentHour(item.datetime) }">
                         <div class="rounded-t-full" :style="`
                         height: ${barHeight(item.spotPrice)}%;
-                                                background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 40%)
+                                                background-color: hsl(${barColorHue(item.totalPrice)}, 70%, 40%)
                         `"></div>
                         <div class="rounded-b-md" :style="`
                         height: ${barHeight(item.afgift)}%;
-                                                background-color: hsl(${barColorHue(item.totalPrice)}, 60%, 30%)
+                                                background-color: hsl(${barColorHue(item.totalPrice)}, 70%, 30%)
                         `"></div>
                     </div>
                     <div class="mt-2 font-mono text-[.5rem] flex justify-center">
@@ -85,7 +85,8 @@ const props = defineProps<{
     maxPrice: number
 }>()
 const _avg = avg(props.records.map(item => item.totalPrice)).toLocaleString("da-dk", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-const barColorHue = (price: number): number => price > props.maxPrice ? 0 : (140 - (price * 150) / props.maxPrice)
+const barColorHue = (price: number): number => price > props.maxPrice ? 0 : 170 - (price / props.maxPrice * 120)
+
 const barHeight = (price: number): number => price / props.maxPrice * 100
 </script>
 
