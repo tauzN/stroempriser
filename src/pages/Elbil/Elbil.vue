@@ -33,9 +33,8 @@
 
             <div class="flex items-center justify-center gap-4">
                 <template v-for="num in [
-                    { text: '6 A', val: 6 * 230 },
-                    { text: '10 A', val: 10 * 230 },
-                    { text: '11 kW', val: 11000 },
+                    { text: '8 A', val: 8 *3* 230*0.9 },
+                    { text: '16 A', val:  16*3*230*0.9},
                     { text: '95 kW', val: 95000 }
                 ]">
                     <label class="w-1/4">
@@ -71,8 +70,8 @@
 
 <script setup lang="ts">
 import { computed, onBeforeMount, ref, watch } from 'vue';
-const batterySize = ref<number>(32)
-const power = ref<number>(11000)
+const batterySize = ref<number>(58)
+const power = ref<number>(16*3*230*0.9)
 const stateOfCharge = ref<number>(50)
 const wantedBattery = ref<number>(100)
 const hoursToCharge = computed<number>(() => {
