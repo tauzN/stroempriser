@@ -4,18 +4,12 @@
       <component :is="Component" />
     </KeepAlive>
   </router-view>
-  <div class=" text-xs fixed bottom-0 left-0 bg-gray-800 w-full h-10 flex items-center justify-evenly z-50">
+  <div class="fixed bottom-0 left-0 z-50 flex items-center w-full h-10 text-xs bg-gray-800 justify-evenly">
     <router-link to="/">Elpriser</router-link>
     <router-link to="/elbil">Opladning</router-link>
   </div>
   <div class="h-10"></div>
 </template>
 <style scoped>
-a {
-  @apply h-full flex items-center w-full justify-center
-}
 
-.router-link-active {
-  @apply bg-gray-700 font-semibold
-}
 </style>
