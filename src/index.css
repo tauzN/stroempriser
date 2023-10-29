@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-    a {
+    nav a {
         @apply h-full flex items-center w-full justify-center
     }
 
