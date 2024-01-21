@@ -1,15 +1,16 @@
 const colors = require('tailwindcss/colors')
-module.exports = {
+/** @type {import('tailwindcss').Config} */
+export default {
   content: [
     "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./src/**/*.{vue,js,ts}",
   ],
   theme: {
     extend: {
       colors: {
-        gray: colors.neutral
+        gray: colors.stone
       }
     },
   },
-  plugins: [require('@tailwindcss/forms'),],
+  plugins: [],
 }

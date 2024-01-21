@@ -107,6 +107,9 @@ input,
 select {
     @apply rounded border border-gray-700;
 }
+button {
+    touch-action: manipulation;
+}
 
 input[type="radio"]:checked~div {
     @apply bg-gray-900 border border-gray-700 rounded
