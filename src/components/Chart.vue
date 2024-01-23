@@ -9,15 +9,15 @@
         </div>
         <div class="flex gap-0.5">
             <div class="flex flex-col items-center justify-end " v-for="record in records">
-                <div class="pb-2 font-mono text-[0.5rem] text-gray-300 text-vertical ">
+                <div class="pb-2 font-mono text-[0.5rem] text-gray-300 text-vertical " :class="{'font-bold':dayjs(record.datetime).isSame(dayjs(), 'hour')}">
                     {{ ((afgiftFromDate(record.datetime) + record.price) * 1.25).toFixed(2) }}
                 </div>
-                <div class="flex flex-col justify-end w-2 overflow-hidden bg-gray-900 rounded-full h-36">
+                <div class="flex flex-col justify-end w-2 overflow-hidden bg-gray-900 rounded-full h-36" :class="{'bg-blue-800 animate-pulse':dayjs(record.datetime).isSame(dayjs(), 'hour')}">
                     <div class="rounded-t-full"
-                        :style="`height: ${height(record)}%; background-color: hsl(${barColorHue(record)}, 70%, 40%)`">
+                        :style="`height: ${height(record)}%; background-color: hsl(${barColorHue(record)}, 100%, 30%)`">
                     </div>
                 </div>
-                <div class="pt-2 font-mono text-gray-300 text-[0.5rem] text-center ">
+                <div class="pt-2 font-mono text-gray-300 text-[0.5rem] text-center " :class="{'font-bold':dayjs(record.datetime).isSame(dayjs(), 'hour')}">
                     {{ dayjs(record.datetime).format("HH") }}
                 </div>
             </div>
