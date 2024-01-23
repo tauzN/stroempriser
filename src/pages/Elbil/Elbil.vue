@@ -116,6 +116,6 @@ input[type="radio"]:checked~div {
 }
 
 section {
-    @apply bg-gray-800 p-4 rounded
+    @apply bg-gray-900 p-2 rounded
 }
 </style>
