@@ -17,8 +17,10 @@
                     {{ ((afgiftFromDate(record.datetime) + record.price) *
                         1.25).toFixed(2) }}
                 </div>
-                <div class="flex flex-col justify-end w-2 overflow-hidden bg-gray-900 rounded-full h-36"
-                    :class="{ 'bg-blue-800 animate-pulse': dayjs(record.datetime).isSame(dayjs(), 'hour') }">
+                <div class="flex flex-col justify-end w-2 overflow-hidden rounded-full h-36"
+                    :class="{
+                        'bg-blue-800 animate-pulse': dayjs(record.datetime).isSame(dayjs(), 'hour') , 'bg-gray-900': !dayjs(record.datetime).isSame(dayjs(), 'hour')
+                        }">
                     <div class="rounded-t-full"
                         :style="`height: ${height(record)}%; background-color: hsl(${barColorHue(record)}, 100%, 30%)`">
                     </div>
