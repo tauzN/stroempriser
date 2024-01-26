@@ -1,8 +1,8 @@
 <template>
     
     <div class="flex flex-col items-center gap-2 m-2">
-        <Chart v-if="records" :maxPrice="maxPrice" :records="records.slice(0, 24)"></Chart>
-        <Chart v-if="records" :maxPrice="maxPrice" :records="records.slice(24, 48)"></Chart>
+        <Chart v-if="records && dayjs(records[0].datetime).isSame(dayjs(), 'day')" :maxPrice="maxPrice" :records="records.slice(0, 24)"></Chart>
+        <Chart v-if="records" :maxPrice="maxPrice" :records="records.slice(24, records.length)"></Chart>
     </div>
     <div class="flex justify-center pt-4">
         <div v-show="records === undefined">Loading ...</div>
@@ -17,6 +17,7 @@ import { getPrices } from '@/api/energidataservice'
 import { Record } from '@/types';
 import Chart from '@/components/Chart.vue';
 import { afgiftFromDate } from '@/prices';
+import dayjs from 'dayjs';
 
 const records = ref<Record[]>()
 
