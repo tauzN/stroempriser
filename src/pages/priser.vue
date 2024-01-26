@@ -7,7 +7,7 @@
     <div class="flex justify-center pt-4">
         <div v-show="records === undefined">Loading ...</div>
 
-        <button class="px-3 py-2 border border-gray-700 rounded-lg" :onClick="reloadPrices">Relaod</button>
+        <button class="px-3 py-2 border border-gray-700 rounded-lg" :onClick="reloadPrices">Reload</button>
     </div>
 </template>
 
