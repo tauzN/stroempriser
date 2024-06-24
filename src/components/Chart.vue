@@ -50,8 +50,11 @@ const barColorHue = (record: Record): number => {
     if ((afgiftFromDate(record.datetime) + record.price) > props.maxPrice) {
         return 0
     }
+    else if ((afgiftFromDate(record.datetime) + record.price) < 1.1) {
+        return 120
+    }
     else {
-        return 170 - ((afgiftFromDate(record.datetime) + record.price) / props.maxPrice * 150)
+        return 120 - 30 * (afgiftFromDate(record.datetime) + record.price)
     }
 }
 
