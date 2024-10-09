@@ -5,16 +5,16 @@
                 {{
                     dayjs(props.records[0].datetime).format("dddd") }}</div>
             <div>{{ (Math.min(...records.map(r => r.price + afgiftFromDate(r.datetime))) * 1.25).toFixed(2).replace(".",
-                    ",") }}</div>
+                ",") }}</div>
             <div>{{ (Math.max(...records.map(r => r.price + afgiftFromDate(r.datetime))) * 1.25).toFixed(2).replace(".",
-                    ",") }}</div>
+                ",") }}</div>
         </div>
         <div class="flex gap-0.5">
             <div class="flex flex-col items-center justify-end " v-for="record in records">
                 <div class="pb-2 font-mono text-[0.5rem] text-gray-300 text-vertical "
                     :class="{ 'font-bold': dayjs(record.datetime).isSame(dayjs(), 'hour') }">
                     {{ ((afgiftFromDate(record.datetime) + record.price) *
-                    1.25).toFixed(2).replace(".", ",") }}
+                        1.25).toFixed(2).replace(".", ",") }}
                 </div>
                 <div class="flex flex-col justify-end w-2 overflow-hidden rounded-full h-36" :class="{
                     'bg-blue-800 animate-pulse': dayjs(record.datetime).isSame(dayjs(), 'hour'), 'bg-gray-900': !dayjs(record.datetime).isSame(dayjs(), 'hour')

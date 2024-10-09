@@ -1,7 +1,8 @@
 <template>
-    
+
     <div class="flex flex-col items-center gap-2 m-2">
-        <Chart v-if="records && dayjs(records[0].datetime).isSame(dayjs(), 'day')" :maxPrice="maxPrice" :records="records.slice(0, 24)"></Chart>
+        <Chart v-if="records && dayjs(records[0].datetime).isSame(dayjs(), 'day')" :maxPrice="maxPrice"
+            :records="records.slice(0, 24)"></Chart>
         <Chart v-if="records" :maxPrice="maxPrice" :records="records.slice(24, records.length)"></Chart>
     </div>
     <div class="flex justify-center pt-4">
@@ -26,6 +27,8 @@ const records = ref<Record[]>()
 const maxPrice = computed(() => {
     if (records.value !== undefined) {
         return Math.max(...records.value.map(record => (afgiftFromDate(record.datetime) + record.price))) + 0.5
+    } else {
+        return 0
     }
 })
 
