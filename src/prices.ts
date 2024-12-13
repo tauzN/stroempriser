@@ -13,14 +13,14 @@ const flat_fee = elafgift + forbrugstariffer;
 // Nettarif https://n1.dk/priser-og-vilkaar
 const prices = {
 	sommer: {
-		lav: 11.01 / 100,
-		hoej: 16.52 / 100,
-		spids: 42.95 / 100,
+		lav: 4.46 / 100,
+		hoej: 6.70 / 100,
+		spids: 17.41 / 100,
 	},
 	vinter: {
-		lav: 11.01 / 100,
-		hoej: 33.03 / 100,
-		spids: 99.1 / 100,
+		lav: 4.46 / 100,
+		hoej: 13.39 / 100,
+		spids: 40.18 / 100,
 	},
 };
 const price = [
