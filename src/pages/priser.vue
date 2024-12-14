@@ -14,10 +14,10 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import { getPrices } from '@/api/energidataservice'
-import { Record } from '@/types';
-import Chart from '@/components/Chart.vue';
-import { afgiftFromDate } from '@/prices';
+import { getPrices } from '../api/energidataservice'
+import { Record } from '../types';
+import Chart from '../components/Chart.vue';
+import { afgiftFromDate } from '../prices';
 import dayjs from 'dayjs';
 
 const records = ref<Record[]>()

@@ -33,8 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import { afgiftFromDate } from '@/prices';
-import { Record } from '@/types';
+import { afgiftFromDate } from '../prices';
+import { Record } from '../types';
 import dayjs from 'dayjs';
 
 const props = defineProps<{

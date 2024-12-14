@@ -1,5 +1,5 @@
-import type { RawRecord, Record } from "@/types"
-import { DKKMWh_to_DKKkWh } from "@/util"
+import type { RawRecord, Record } from "../types"
+import { DKKMWh_to_DKKkWh } from "../util"
 import dayjs from "dayjs"
 export const getPrices = async (): Promise<Record[]> => {
     try {
