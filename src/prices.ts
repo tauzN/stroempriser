@@ -1,26 +1,26 @@
 import dayjs from "dayjs";
 
 // Forbrugstariffer https://energinet.dk/el/elmarkedet/tariffer/aktuelle-tariffer/
-const net = 7.4 / 100; // DKK
-const system = 5.1 / 100; // DKK
+const net = 6.1 / 100; // DKK
+const system = 7.4 / 100; // DKK
 export const forbrugstariffer = net + system;
 
 // Elafgift https://skm.dk/tal-og-metode/satser/satser-og-beloebsgraenser-i-lovgivningen/elafgiftsloven
-export const elafgift: number = 76.1 / 100; // DKK
+export const elafgift: number = 72.0 / 100; // DKK
 
 const flat_fee = elafgift + forbrugstariffer;
 
 // Nettarif https://n1.dk/priser-og-vilkaar
 const prices = {
 	sommer: {
-		lav: 4.46 / 100,
-		hoej: 6.70 / 100,
-		spids: 17.41 / 100,
+		lav: 11.01 / 100,
+		hoej: 16.52 / 100,
+		spids: 42.95 / 100,
 	},
 	vinter: {
-		lav: 4.46 / 100,
-		hoej: 13.39 / 100,
-		spids: 40.18 / 100,
+		lav: 11.01 / 100,
+		hoej: 33.03 / 100,
+		spids: 99.10 / 100,
 	},
 };
 const price = [
